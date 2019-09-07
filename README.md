@@ -1,2 +1,2 @@
 # power-split
-C++ UWP app that uses multithreading
+C++/CX UWP app that uses multithreading
