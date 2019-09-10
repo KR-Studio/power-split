@@ -14,8 +14,8 @@
   <mp:PhoneIdentity PhoneProductId="a16387b7-fd0e-406b-9d18-f509acd9cd12" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>DPCT_lab_1</DisplayName>
-    <PublisherDisplayName>Doom9</PublisherDisplayName>
+    <DisplayName>PowerSplit 2</DisplayName>
+    <PublisherDisplayName>KR-Software</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -37,7 +37,7 @@
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="PowerSplit 2 is C++/CX UWP app that uses multithreading"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png"  BackgroundColor="black"/>
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
