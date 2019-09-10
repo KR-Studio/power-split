@@ -18,5 +18,6 @@ namespace PowerSplit
 		MainPage();
 
 	private:
+		void RectangleTextLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }
