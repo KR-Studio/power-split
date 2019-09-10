@@ -25,29 +25,33 @@ using namespace Windows::UI::Xaml::Shapes;
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
 std::mutex mtx;
-std::map<Rectangle^, String^> squares_map;
+std::map<String^, String^> squares_map;
 
 MainPage::MainPage()
 {
 	InitializeComponent();
 }
 
-void thread_rect_square(int width, int height) {
+void thread_rect_square(String^ name, int width, int height) {
 	std::lock_guard<std::mutex> guard(mtx);
 	int squareNum = width * height;
 	std::wstring squareNumWstr = std::to_wstring(squareNum);
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	// squares_map[rectangle] = squareNumPStr;
+	squares_map[name] = squareNumPStr;
 }
 
 void thread_all_rect_square() {
 	std::lock_guard<std::mutex> guard(mtx);
 	int squareNum = 0;
+	for (auto const& [key, val] : squares_map) {
+		std::wstring valuePstrWstr(val->Data());
+		int value = std::stoi(valuePstrWstr);
+		squareNum += value;
+	}
 	std::wstring squareNumWstr = std::to_wstring(squareNum);
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	// squares_map[rectangle] = squareNumPStr;
 }
 
 void PowerSplit::MainPage::RectangleTextLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
@@ -56,7 +60,7 @@ void PowerSplit::MainPage::RectangleTextLoaded(Platform::Object^ sender, Windows
 	std::vector<std::thread> threads;
 
 	for each (Rectangle^ rectangle in rectangles) {
-		std::thread thr(thread_rect_square, rectangle->Width, rectangle->Height);
+		std::thread thr(thread_rect_square, rectangle->Name ,rectangle->Width, rectangle->Height);
 		threads.emplace_back(std::move(thr));
 	}
 	std::thread thr(thread_all_rect_square);
