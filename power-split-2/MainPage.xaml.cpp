@@ -26,7 +26,7 @@ using namespace Windows::UI::Xaml::Shapes;
 
 std::mutex mtx;
 std::map<String^, String^> squares_map;
-TextBlock^ textblocks[4];
+TextBlock^ rectangleTextBlocks[5];
 
 
 MainPage::MainPage()
@@ -34,32 +34,12 @@ MainPage::MainPage()
 	InitializeComponent();
 }
 
-void PowerSplit::MainPage::thread_rect_square(Platform::String^ name, double width, double height) {
-	//std::lock_guard<std::mutex> guard(mtx);
+void thread_rect_square(Platform::String^ name, double width, double height) {
+	std::lock_guard<std::mutex> guard(mtx);
 	int squareNum = width * height;
 	std::wstring squareNumWstr = std::to_wstring(squareNum);
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
-	/*
-	String^ nameTextBlock = name + "Text";
-	squares_map[name] = squareNumPStr;
-	*/
-	/*
-	String^ textBlockText = name;
-	squares_map[name] = squareNumPStr;
-	textblocks_map.insert({ textBlockText, squareNumPStr });
-	*/
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	String^ nameTextBlock = name + "Text";
-	//for (auto &textblock : textblocks) {
-		//if ((nameTextblock) == textblock->Name) {
-			//textblock->Text = "etttsstststt";
-		//}
-	//}
-	// rectangle1Text->Text = "sheeeeesh!";
-
-     textblocks[0]->Text = "sheeesh1";
-	//rectanglesText->Text = "sheesh";
-	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	squares_map[name] = squareNumPStr;
 }
 
@@ -74,41 +54,25 @@ void thread_all_rect_square() {
 	std::wstring squareNumWstr = std::to_wstring(squareNum);
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	squares_map["rectangles"] = squareNumPStr;
 }
 
 void PowerSplit::MainPage::RectangleTextLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	Rectangle^ rectangles[] = { rectangle1, rectangle2, rectangle3, rectangle4 };
-	
-	textblocks[0] = rectangle1Text;
-	textblocks[1] = rectangle2Text;
-	textblocks[2] = rectangle3Text;
-	textblocks[3] = rectangle4Text;
 
-    /*
-	textblocks_map2.insert({ rectangle1Text, rectangle1Text->Text });
-	textblocks_map2.insert({ rectangle2Text, rectangle2Text->Text });
-	textblocks_map2.insert({ rectangle3Text, rectangle3Text->Text });
-	textblocks_map2.insert({ rectangle4Text, rectangle4Text->Text });
-	/*textblocks[0] = rectangle1text;
-	textblocks[1] = rectangle2text;
-	textblocks[2] = rectangle3text;
-	textblocks[3] = rectangle4text;
-    */
+	rectangleTextBlocks[0] = rectangle1Text;
+	rectangleTextBlocks[1] = rectangle2Text;
+	rectangleTextBlocks[2] = rectangle3Text;
+	rectangleTextBlocks[3] = rectangle4Text;
+	rectangleTextBlocks[4] = rectanglesText;
+
 	std::vector<std::thread> threads;
 
 	for each (Rectangle^ rectangle in rectangles) {
-		std::thread thr(&PowerSplit::MainPage::thread_rect_square, rectangle->Name, rectangle->Width, rectangle->Height);
+		std::thread thr(thread_rect_square, rectangle->Name, rectangle->Width, rectangle->Height);
 		threads.emplace_back(std::move(thr));
 	}
-
-	/*
-	for (auto& [key, val] : textblocks_map2) {
-		//if (textblocks_map.find(val) != textblocks_map.end) {
-			key->Text = textblocks_map.find(val)->second;
-		//}/
-	}
-	*/
 
 	std::thread thr(thread_all_rect_square);
 	threads.emplace_back(std::move(thr));
@@ -116,5 +80,13 @@ void PowerSplit::MainPage::RectangleTextLoaded(Platform::Object^ sender, Windows
 	for (auto& thread : threads) {
 		thread.join();
 	}
-	
+
+	for (auto& [name, square] : squares_map) {
+		for (auto& textblock : rectangleTextBlocks) {
+			if (name == textblock->Text) {
+				textblock->Text = square;
+			}
+		}
+	}
+
 }

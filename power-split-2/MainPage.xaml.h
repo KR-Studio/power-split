@@ -19,6 +19,5 @@ namespace PowerSplit
 
 	private:
 		void RectangleTextLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void thread_rect_square(Platform::String^ name, double width, double height);
 	};
 }
