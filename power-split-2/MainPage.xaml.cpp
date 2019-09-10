@@ -27,12 +27,7 @@ using namespace Windows::UI::Xaml::Shapes;
 std::mutex mtx;
 std::map<String^, String^> squares_map;
 TextBlock^ textblocks[4];
-// std::vector<TextBlock^> textblocks;
-TextBlock^ textblocks[4];
-/*
-std::map<String^, String^> textblocks_map;
-std::map<TextBlock^, String^> textblocks_map2;
-*/
+
 
 MainPage::MainPage()
 {
@@ -46,7 +41,8 @@ void PowerSplit::MainPage::thread_rect_square(Platform::String^ name, double wid
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
 	/*
 	String^ nameTextBlock = name + "Text";
-	squares_map[name] = squareNumPStr;*/
+	squares_map[name] = squareNumPStr;
+	*/
 	/*
 	String^ textBlockText = name;
 	squares_map[name] = squareNumPStr;
@@ -97,7 +93,7 @@ void PowerSplit::MainPage::RectangleTextLoaded(Platform::Object^ sender, Windows
 	/*textblocks[0] = rectangle1text;
 	textblocks[1] = rectangle2text;
 	textblocks[2] = rectangle3text;
-	textblocks[3] = rectangle4text;*/
+	textblocks[3] = rectangle4text;
     */
 	std::vector<std::thread> threads;
 
@@ -106,11 +102,13 @@ void PowerSplit::MainPage::RectangleTextLoaded(Platform::Object^ sender, Windows
 		threads.emplace_back(std::move(thr));
 	}
 
+	/*
 	for (auto& [key, val] : textblocks_map2) {
 		//if (textblocks_map.find(val) != textblocks_map.end) {
 			key->Text = textblocks_map.find(val)->second;
 		//}/
 	}
+	*/
 
 	std::thread thr(thread_all_rect_square);
 	threads.emplace_back(std::move(thr));
