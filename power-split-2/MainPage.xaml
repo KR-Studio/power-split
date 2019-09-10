@@ -15,23 +15,23 @@
                 <TextBlock Text="Rectangle area in pixels" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="20,0,0,0"/>
                 <StackPanel x:Name="rectanglesPanel" Orientation="Horizontal" Margin="0,20,0,20">
                     <StackPanel x:Name="rectanglePanel" Orientation="Vertical" Margin="20,0,20,0">
-                        <TextBlock x:Name="rectangle1Text" Text="rectangle1" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Loaded="RectangleTextLoaded"/>
-                        <TextBlock Text="Thread 1" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock x:Name="rectangle1Text" Text="rectangle1" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="RectangleTextLoaded"/>
+                        <TextBlock Text="Thread 1" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <Rectangle x:Name="rectangle1" Height="150" Width="60" Fill="#FF6F4E37" HorizontalAlignment="Center" Margin="0,0,0,0" Stroke="White"/>
                     </StackPanel>
                     <StackPanel x:Name="rectangle2Panel" Orientation="Vertical" Margin="20,0,20,0">
-                        <TextBlock x:Name="rectangle2Text" Text="rectangle2" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}"  Loaded="RectangleTextLoaded"/>
-                        <TextBlock Text="Thread 2" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock x:Name="rectangle2Text" Text="rectangle2" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"  Loaded="RectangleTextLoaded"/>
+                        <TextBlock Text="Thread 2" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <Rectangle x:Name="rectangle2" Height="160" Width="60" Fill="Black" HorizontalAlignment="Center" Margin="0,0,0,0" Stroke="White"/>
                     </StackPanel>
                     <StackPanel x:Name="rectangle3Panel" Orientation="Vertical" Margin="20,0,20,0">
-                        <TextBlock x:Name="rectangle3Text" Text="rectangle3" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Loaded="RectangleTextLoaded"/>
-                        <TextBlock Text="Thread 3" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock x:Name="rectangle3Text" Text="rectangle3" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="RectangleTextLoaded"/>
+                        <TextBlock Text="Thread 3" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <Rectangle x:Name="rectangle3" Height="130" Width="40" Fill="Blue" HorizontalAlignment="Center" Margin="0,0,0,0" Stroke="White"/>
                     </StackPanel>
                     <StackPanel x:Name="rectangle4Panel" Orientation="Vertical" Margin="20,0,20,0">
-                        <TextBlock x:Name="rectangle4Text" Text="rectangle4" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Loaded="RectangleTextLoaded"/>
-                        <TextBlock Text="Thread 4" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}"/>
+                        <TextBlock x:Name="rectangle4Text" Text="rectangle4" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="RectangleTextLoaded"/>
+                        <TextBlock Text="Thread 4" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
                         <Rectangle x:Name="rectangle4" Height="140" Width="50" Fill="Green" HorizontalAlignment="Center" Margin="0,0,0,0" Stroke="White"/>
                     </StackPanel>
                 </StackPanel>
