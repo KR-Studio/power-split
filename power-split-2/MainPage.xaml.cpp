@@ -26,7 +26,8 @@ using namespace Windows::UI::Xaml::Shapes;
 
 std::mutex mtx;
 std::map<String^, String^> squares_map;
-std::vector<TextBlock^> textblocks;
+//std::vector<TextBlock^> textblocks;
+TextBlock^ textblocks[4];
 
 MainPage::MainPage()
 {
@@ -39,11 +40,12 @@ void thread_rect_square(String^ name, int width, int height) {
 	std::wstring squareNumWstr = std::to_wstring(squareNum);
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
 	String^ nameTextBlock = name + "Text";
-	for (auto textblock : textblocks) {
+	//for (auto &textblock : textblocks) {
 		//if ((nameTextblock) == textblock->Name) {
-			textblock->Text = nameTextBlock;
+			//textblock->Text = "etttsstststt";
 		//}
-	}
+	//}
+	rectangle1Text->Text = "sheeeeesh!";
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	squares_map[name] = squareNumPStr;
 }
@@ -64,10 +66,14 @@ void thread_all_rect_square() {
 void PowerSplit::MainPage::RectangleTextLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	Rectangle^ rectangles[] = { rectangle1, rectangle2, rectangle3, rectangle4 };
-	textblocks.push_back(rectangle1Text);
-	textblocks.push_back(rectangle2Text);
-	textblocks.push_back(rectangle3Text);
-	textblocks.push_back(rectangle4Text);
+	//textblocks.push_back(rectangle1Text);
+	//textblocks.push_back(rectangle2Text);
+	//textblocks.push_back(rectangle3Text);
+	//textblocks.push_back(rectangle4Text);
+	textblocks[0] = rectangle1Text;
+	textblocks[1] = rectangle2Text;
+	textblocks[2] = rectangle3Text;
+	textblocks[3] = rectangle4Text;
 	std::vector<std::thread> threads;
 
 	for each (Rectangle^ rectangle in rectangles) {
