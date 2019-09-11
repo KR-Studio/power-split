@@ -45,28 +45,28 @@
                 <StackPanel x:Name="taskControlsPanel" Orientation="Horizontal" Margin="0,40,0,20">
                     <StackPanel x:Name="taskControl1Panel" Orientation="Vertical" Margin="20,0,20,0" Width="84">
                         <TextBlock x:Name="taskControl1Text" TextWrapping="Wrap" Text="Thread 1 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
-                        <Button x:Name="startTask1" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-                        <Button x:Name="stopTask1" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        <Button x:Name="startTask1" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask1_Click"/>
+                        <Button x:Name="stopTask1" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask1_Click"/>
                     </StackPanel>
                     <StackPanel x:Name="taskControl2Panel" Orientation="Vertical" Margin="20,0,20,0" Width="86">
                         <TextBlock x:Name="taskControl2Text" TextWrapping="Wrap" Text="Thread 2 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
-                        <Button x:Name="startTask2" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-                        <Button x:Name="stopTask2" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        <Button x:Name="startTask2" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask2_Click"/>
+                        <Button x:Name="stopTask2" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask2_Click"/>
                     </StackPanel>
                     <StackPanel x:Name="taskControl3Panel" Orientation="Vertical" Margin="20,0,20,0" Width="86">
                         <TextBlock x:Name="taskControl3Text" TextWrapping="Wrap" Text="Thread 3 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
-                        <Button x:Name="startTask3" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-                        <Button x:Name="stopTask3" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        <Button x:Name="startTask3" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask3_Click"/>
+                        <Button x:Name="stopTask3" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask3_Click"/>
                     </StackPanel>
                     <StackPanel x:Name="taskControl4Panel" Orientation="Vertical" Margin="20,0,20,0" Width="87">
                         <TextBlock x:Name="taskControl4Text" TextWrapping="Wrap" Text="Thread 4 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
-                        <Button x:Name="startTask4" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-                        <Button x:Name="stopTask4" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        <Button x:Name="startTask4" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask4_Click"/>
+                        <Button x:Name="stopTask4" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask4_Click"/>
                     </StackPanel>
                     <StackPanel x:Name="taskControl5Panel" Orientation="Vertical" Margin="20,0,20,0" Width="87">
                         <TextBlock x:Name="taskControl5Text" TextWrapping="Wrap" Text="Thread 5 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
-                        <Button x:Name="startTask5" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-                        <Button x:Name="stopTask5" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        <Button x:Name="startTask5" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask5_Click"/>
+                        <Button x:Name="stopTask5" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask5_Click"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
