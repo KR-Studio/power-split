@@ -43,9 +43,9 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel x:Name="taskControlPanel" Orientation="Vertical" Margin="20,0,20,0">
-                    <TextBlock x:Name="taskControl1Text"></TextBlock>
-                    <Button x:Name="startTask1" Content="Start" Margin="0,10,0,0"></Button>
-                    <Button x:Name="stopTask1" Content="Stop" Margin="0,10,0,0"></Button>
+                    <TextBlock x:Name="taskControl1Text" TextWrapping="Wrap" Text="Thread 1 controls:" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Loaded="Thread1ControlsLoaded" Width="152"/>
+                    <Button x:Name="startTask1" Content="Start" Margin="0,10,0,0"/>
+                    <Button x:Name="stopTask1" Content="Stop" Margin="0,10,0,0"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
