@@ -7,7 +7,7 @@
 
 #include "MainPage.g.h"
 
-namespace power_split_3
+namespace PowerSplit
 {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
@@ -16,6 +16,8 @@ namespace power_split_3
 	{
 	public:
 		MainPage();
-
+	private:
+		void RectangleTextLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void ThreadControlsLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }

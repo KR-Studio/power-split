@@ -1,7 +1,7 @@
 ﻿<Application
-    x:Class="power_split_3.App"
+    x:Class="PowerSplit.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:power_split_3">
-
+    xmlns:local="using:PowerSplit"
+    RequestedTheme="Dark">
 </Application>
