@@ -17,7 +17,7 @@
                     <StackPanel x:Name="rectanglePanel" Orientation="Vertical" Margin="20,0,20,0">
                         <TextBlock x:Name="rectangle1Text" Text="rectangle1" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="RectangleTextLoaded"/>
                         <TextBlock Text="Thread 1" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"/>
-                        <Rectangle x:Name="rectangle1" Height="150" Width="60" Fill="#FF6F4E37" HorizontalAlignment="Center" Margin="0,0,0,0" Stroke="White"/>
+                        <Rectangle x:Name="rectangle1" Height="190" Width="30" Fill="#FF1493" HorizontalAlignment="Center" Margin="0,0,0,0" Stroke="White"/>
                     </StackPanel>
                     <StackPanel x:Name="rectangle2Panel" Orientation="Vertical" Margin="20,0,20,0">
                         <TextBlock x:Name="rectangle2Text" Text="rectangle2" TextWrapping="Wrap" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"  Loaded="RectangleTextLoaded"/>
