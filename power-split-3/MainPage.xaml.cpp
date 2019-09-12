@@ -37,7 +37,7 @@ MainPage::MainPage()
 
 void thread_rect_square(Platform::String^ name, double width, double height) {
 	std::lock_guard<std::mutex> guard(mtx);
-	double squareNum = width * height;
+	int squareNum = width * height;
 	std::wstring squareNumWstr = std::to_wstring(squareNum);
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -56,6 +56,20 @@ void thread_all_rect_square() {
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	squares_map["rectangles"] = squareNumPStr;
+}
+
+void finalise() {
+	/*for (auto& thread : threads) {
+		thread.join();
+	}*/
+
+	for (auto& [name, square] : squares_map) {
+		for (auto& textblock : rectangleTextBlocks) {
+			if (name == textblock->Text) {
+				textblock->Text = square;
+			}
+		}
+	}
 }
 
 
@@ -81,17 +95,7 @@ void PowerSplit::MainPage::ThreadControlsLoaded(Platform::Object^ sender, Window
 		threads.emplace_back(std::move(thr));
 	}*/
 
-	for (auto& thread : threads) {
-		thread.join();
-	}
-
-	/*for (auto& [name, square] : squares_map) {
-		for (auto& textblock : rectangleTextBlocks) {
-			if (name == textblock->Text) {
-				textblock->Text = square;
-			}
-		}
-	}*/
+	
 }
 
 
@@ -99,6 +103,7 @@ void PowerSplit::MainPage::StartTask1_Click(Platform::Object^ sender, Windows::U
 {
 	std::thread thr(thread_rect_square, rectangle1->Name, rectangle1->Width, rectangle1->Height);
 	threads.emplace_back(std::move(thr));
+	finalise();
 }
 
 
@@ -112,6 +117,7 @@ void PowerSplit::MainPage::StartTask2_Click(Platform::Object^ sender, Windows::U
 {
 	std::thread thr(thread_rect_square, rectangle2->Name, rectangle2->Width, rectangle2->Height);
 	threads.emplace_back(std::move(thr));
+	finalise();
 }
 
 
@@ -125,6 +131,7 @@ void PowerSplit::MainPage::StartTask3_Click(Platform::Object^ sender, Windows::U
 {
 	std::thread thr(thread_rect_square, rectangle3->Name, rectangle3->Width, rectangle3->Height);
 	threads.emplace_back(std::move(thr));
+	finalise();
 }
 
 
@@ -138,6 +145,7 @@ void PowerSplit::MainPage::StartTask4_Click(Platform::Object^ sender, Windows::U
 {
 	std::thread thr(thread_rect_square, rectangle4->Name, rectangle4->Width, rectangle4->Height);
 	threads.emplace_back(std::move(thr));
+	finalise();
 }
 
 
@@ -151,6 +159,7 @@ void PowerSplit::MainPage::StartTask5_Click(Platform::Object^ sender, Windows::U
 {
 	std::thread thr(thread_all_rect_square);
 	threads.emplace_back(std::move(thr));
+	finalise();
 }
 
 
