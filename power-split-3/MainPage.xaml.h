@@ -17,6 +17,7 @@ namespace PowerSplit
 	public:
 		MainPage();
 	private:
+		void Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void RectangleTextLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void ThreadControlsLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void StartTask1_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
