@@ -6,7 +6,7 @@
 #include "pch.h"
 #include "MainPage.xaml.h"
 
-using namespace power_split_4;
+using namespace PowerSplit;
 
 using namespace Platform;
 using namespace Windows::Foundation;
@@ -27,7 +27,7 @@ MainPage::MainPage()
 }
 
 
-void power_split_4::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	
 }

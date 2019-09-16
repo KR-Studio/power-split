@@ -7,7 +7,7 @@
 
 #include "App.g.h"
 
-namespace power_split_4
+namespace PowerSplit
 {
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
