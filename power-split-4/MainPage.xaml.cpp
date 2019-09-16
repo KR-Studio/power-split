@@ -33,7 +33,12 @@ MainPage::MainPage()
 
 void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	
+	HANDLE process = GetCurrentProcess();
+	DWORD_PTR processAffinityMask = 0b0011;
+
+	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
+
+	OutputDebugString((LPCWSTR)"777");
 }
 
 
@@ -86,4 +91,10 @@ void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::
 
 	// changing text in textBlockActiveProcessors with currently active processor ids
 	textBlockActiveProcessors->Text = checkBoxesActiveText;
+}
+
+
+void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
 }
