@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "MainPage.xaml.h"
 #include <string>
+#include <numeric>
 
 using namespace PowerSplit;
 
@@ -28,6 +29,14 @@ std::vector<int> checkBoxesActive = { 1 };
 MainPage::MainPage()
 {
 	InitializeComponent();
+}
+
+std::wstring s2ws(const std::string& str)
+{
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+	std::wstring wstrTo(size_needed, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+	return wstrTo;
 }
 
 
@@ -96,5 +105,25 @@ void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::
 
 void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	// Initialize random numbers vector and populate it (needs to be replaced with function call)
+	auto vectorSizePstr = textBoxArray->Text->ToString();
+	std::wstring vectorSizePstrWstr(vectorSizePstr->Data());
+	int vectorSize = std::stoi(vectorSizePstrWstr);
+	std::vector<int> v(vectorSize);
+	std::generate(v.begin(), v.end(), std::rand);
 
+	//TODO: rewrite for parallel calculations
+	double average = std::accumulate(v.begin(), v.end(), 0.0) / v.size();
+
+	// Convert calculated average to Platform::String and output it
+	std::wstring averageWstr = std::to_wstring(average);
+	String^ averagePstr = ref new String(averageWstr.c_str());
+	textBlockOutput->Text = averagePstr;
+
+	/*std::thread th(partial_sum);
+	threads.emplace_back(std::move(thr));*/
+
+	/*for (auto& thread : threads) {
+		thread.join();
+	}*/
 }
