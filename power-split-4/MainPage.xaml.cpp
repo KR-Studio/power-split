@@ -47,7 +47,7 @@ void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xa
 
 	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
 
-	OutputDebugString((LPCWSTR)"777");
+	OutputDebugString((LPWSTR)"777");
 }
 
 
@@ -111,6 +111,28 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 	int vectorSize = std::stoi(vectorSizePstrWstr);
 	std::vector<int> v(vectorSize);
 	std::generate(v.begin(), v.end(), std::rand);
+
+	std::size_t const parts_num = v.size() / vectorSize;
+
+
+	auto partsNumPstr = textBoxThreads->Text->ToString();
+	std::wstring partsNumPstrWstr(partsNumPstr->Data());
+	int partsNum = std::stoi(partsNumPstrWstr);
+
+	std::vector<std::vector<int>> parts(partsNum);
+
+	int partSize = std::round(vectorSize / partsNum);
+
+	int lastPos = 0;
+
+	for (int i = 0; i < vectorSize; i++) {
+		if (lastPos <= vectorSize) {
+			std::vector<int> split(v[lastPos], v[lastPos + partSize]);
+			parts[i] = split;
+			lastPos += partSize;
+		}
+		
+	}
 
 	//TODO: rewrite for parallel calculations
 	double average = std::accumulate(v.begin(), v.end(), 0.0) / v.size();
