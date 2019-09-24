@@ -7,6 +7,7 @@
 #include "MainPage.xaml.h"
 #include <string>
 #include <numeric>
+#include <time.h>
 
 using namespace PowerSplit;
 
@@ -42,12 +43,7 @@ std::wstring s2ws(const std::string& str)
 
 void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	HANDLE process = GetCurrentProcess();
-	DWORD_PTR processAffinityMask = 0b0011;
-
-	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
-
-	OutputDebugString((LPWSTR)"777");
+	
 }
 
 
@@ -105,6 +101,15 @@ void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::
 
 void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	// Start execution time measurement
+	clock_t tStart = clock();
+	
+	
+	HANDLE process = GetCurrentProcess();
+	DWORD_PTR processAffinityMask = 0b1;
+
+	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
+
 	// Initialize random numbers vector and populate it (needs to be replaced with function call)
 	auto vectorSizePstr = textBoxArray->Text->ToString();
 	std::wstring vectorSizePstrWstr(vectorSizePstr->Data());
@@ -121,7 +126,7 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 
 	std::vector<std::vector<int>> parts(partsNum);
 
-	int partSize = std::round(vectorSize / partsNum);
+	/*int partSize = std::round(vectorSize / partsNum);
 
 	int lastPos = 0;
 
@@ -132,7 +137,7 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 			lastPos += partSize;
 		}
 		
-	}
+	}*/
 
 	//TODO: rewrite for parallel calculations
 	double average = std::accumulate(v.begin(), v.end(), 0.0) / v.size();
@@ -148,4 +153,12 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 	/*for (auto& thread : threads) {
 		thread.join();
 	}*/
+
+
+	//Output execution time
+	double execTime = (double)(clock() - tStart) / CLOCKS_PER_SEC;
+	std::string execTimeStr = "/n Execution time: " + std::to_string(execTime) + "ms";
+	std::wstring execTimeWstr = s2ws(execTimeStr);
+	String^ execTimePstr = ref new String(execTimeWstr.c_str());
+	textBlockOutput->Text += execTimePstr;
 }
