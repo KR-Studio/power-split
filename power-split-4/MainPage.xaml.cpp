@@ -27,6 +27,7 @@ using namespace Windows::UI::Xaml::Navigation;
 
 // Vector with ids of processors that have activeState in checkBoxes
 std::vector<int> checkBoxesActive = { 0 };
+std::vector<double> averages;
 
 MainPage::MainPage()
 {
@@ -50,6 +51,14 @@ void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xa
 void buttonStateChange(Windows::UI::Xaml::Controls::Button^ btnName, bool state)
 {
 	btnName->IsEnabled = state;
+}
+
+void thread_average(int vol)
+{
+	std::vector<int> v(vol);
+	std::generate(v.begin(), v.end(), std::rand);
+	double average = std::accumulate(v.begin(), v.end(), 0.0) / v.size();
+	averages.push_back(average);
 }
 
 
@@ -122,57 +131,53 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 	}
 	std::reverse(bitsetStr.begin(), bitsetStr.end());
 
-	//std::string bits = "0b" + bitsetStr;
-
 	std::bitset<16> bits(bitsetStr);
-	int bitset = (int)(bits.to_ulong());;
+	int bitset = (int)(bits.to_ulong());
 	DWORD_PTR processAffinityMask = bitset;
 
 	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
 
-	// Initialize random numbers vector and populate it (needs to be replaced with function call)
-	auto vectorSizePstr = textBoxArray->Text->ToString();
-	std::wstring vectorSizePstrWstr(vectorSizePstr->Data());
-	int vectorSize = std::stoi(vectorSizePstrWstr);
-	std::vector<int> v(vectorSize);
-	std::generate(v.begin(), v.end(), std::rand);
-
-	std::size_t const parts_num = v.size() / vectorSize;
-
+	
+	auto elementsNumPstr = textBoxArray->Text->ToString();
+	std::wstring elementsNumPstrWstr(elementsNumPstr->Data());
+	int elementsNum = std::stoi(elementsNumPstrWstr);
 
 	auto partsNumPstr = textBoxThreads->Text->ToString();
 	std::wstring partsNumPstrWstr(partsNumPstr->Data());
 	int partsNum = std::stoi(partsNumPstrWstr);
 
-	std::vector<std::vector<int>> parts(partsNum);
+	int partVolume = 0;
+	int remainderFlag = 0;
+	if (elementsNum % partsNum != 0.0) {
+		partsNum += 1;
+		partVolume = std::floor(elementsNum / partsNum);
+		remainderFlag = 1;
+	}
+	else {
+		partVolume = elementsNum / partsNum;
+	}
 
-	/*int partSize = std::round(vectorSize / partsNum);
+	std::vector<std::thread> threads;
 
-	int lastPos = 0;
-
-	for (int i = 0; i < vectorSize; i++) {
-		if (lastPos <= vectorSize) {
-			std::vector<int> split(v[lastPos], v[lastPos + partSize]);
-			parts[i] = split;
-			lastPos += partSize;
+	for (int c = 0; c <= partsNum; c++) {
+		if (c == partsNum && remainderFlag == 1) {
+			partVolume = elementsNum - ((std::floor(elementsNum / partsNum)) * partsNum);
 		}
 		
-	}*/
+		std::thread thr(thread_average, partVolume);
+		threads.emplace_back(std::move(thr));
+	}
 
-	//TODO: rewrite for parallel calculations
-	double average = std::accumulate(v.begin(), v.end(), 0.0) / v.size();
+	for (auto& thread : threads) {
+		thread.join();
+	}
+
+	double globalAverage = std::accumulate(averages.begin(), averages.end(), 0.0) / averages.size();
 
 	// Convert calculated average to Platform::String and output it
-	std::wstring averageWstr = std::to_wstring(average);
+	std::wstring averageWstr = std::to_wstring(globalAverage);
 	String^ averagePstr = ref new String(averageWstr.c_str());
 	textBlockOutput->Text = averagePstr;
-
-	/*std::thread th(partial_sum);
-	threads.emplace_back(std::move(thr));*/
-
-	/*for (auto& thread : threads) {
-		thread.join();
-	}*/
 
 
 	//Output execution time
