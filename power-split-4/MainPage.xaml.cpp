@@ -45,7 +45,18 @@ std::wstring s2ws(const std::string& str)
 
 void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	
+	bool yrslvHardware = true;
+	// Check for YRSLVs Intel Core i5-7300HQ
+	if (yrslvHardware) {
+		checkBox5->IsEnabled = false;
+		checkBox6->IsEnabled = false;
+		checkBox7->IsEnabled = false;
+		checkBox8->IsEnabled = false;
+		checkBox9->IsEnabled = false;
+		checkBox10->IsEnabled = false;
+		checkBox11->IsEnabled = false;
+		checkBox12->IsEnabled = false;
+	}
 }
 
 void buttonStateChange(Windows::UI::Xaml::Controls::Button^ btnName, bool state)
@@ -175,7 +186,6 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 	double globalAverage = std::accumulate(averages.begin(), averages.end(), 0.0) / averages.size();
 
 	// Convert calculated average to Platform::String and output it
-
 	std::string averageStr = "\r\n Average: " + std::to_string(globalAverage);
 	std::wstring averageWstr = s2ws(averageStr);
 	String^ averagePstr = ref new String(averageWstr.c_str());
