@@ -8,6 +8,7 @@
 #include <string>
 #include <numeric>
 #include <time.h>
+#include <bitset>
 
 using namespace PowerSplit;
 
@@ -25,7 +26,7 @@ using namespace Windows::UI::Xaml::Navigation;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 // Vector with ids of processors that have activeState in checkBoxes
-std::vector<int> checkBoxesActive = { 1 };
+std::vector<int> checkBoxesActive = { 0 };
 
 MainPage::MainPage()
 {
@@ -46,6 +47,11 @@ void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xa
 	
 }
 
+void buttonStateChange(Windows::UI::Xaml::Controls::Button^ btnName, bool state)
+{
+	btnName->IsEnabled = state;
+}
+
 
 void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
@@ -59,7 +65,7 @@ void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::
 	String^ checkBoxesActiveText = "";
 
 	// checking active processors
-	for each (CheckBox ^ checkBox in checkBoxes)
+	for each (CheckBox^ checkBox in checkBoxes)
 	{
 		if (checkBox->IsChecked->Value == true) {
 			// change checkBox->Content dataType from String^ to int
@@ -74,9 +80,11 @@ void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::
 
 	// writing text about currently active processor ids
 	if (checkBoxesActive.empty()) {
-		checkBoxesActiveText = "There is no active Processors here";
+		checkBoxesActiveText = "There are no active processor cores here";
+		buttonStateChange(calculateBtn, false);
 	}
 	else {
+		buttonStateChange(calculateBtn, true);
 		for (auto& checkBoxActive : checkBoxesActive) // access by reference to avoid copying
 		{
 			// change checkBoxActive dataType from int to String^
@@ -85,7 +93,7 @@ void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::
 
 			// adding information about currently active processor ids into checkBoxesActiveText
 			if (checkBoxesActiveText == "") {
-				checkBoxesActiveText += "Active processors: ";
+				checkBoxesActiveText += "Active processor cores: ";
 				checkBoxesActiveText += checkBoxActivePStr;
 			}
 			else {
@@ -106,7 +114,19 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 	
 	
 	HANDLE process = GetCurrentProcess();
-	DWORD_PTR processAffinityMask = 0b1;
+
+	std::string bitsetStr = "000000000000";
+	for (auto& checkBoxActive : checkBoxesActive) // access by reference to avoid copying
+	{
+		bitsetStr[checkBoxActive] = '1';
+	}
+	std::reverse(bitsetStr.begin(), bitsetStr.end());
+
+	//std::string bits = "0b" + bitsetStr;
+
+	std::bitset<16> bits(bitsetStr);
+	int bitset = (int)(bits.to_ulong());;
+	DWORD_PTR processAffinityMask = bitset;
 
 	BOOL success = SetProcessAffinityMask(process, processAffinityMask);
 

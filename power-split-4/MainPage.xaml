@@ -13,31 +13,31 @@
             <TextBlock x:Name="title" HorizontalAlignment="Left" Text="PowerSplit 4" FontSize="36"/>
             <StackPanel Orientation="Horizontal" Margin="0,40,0,20">
                 <StackPanel x:Name="checkBoxesPanel" Orientation="Vertical">
-                    <TextBlock HorizontalAlignment="Left" Text="Accessible processors" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <TextBlock HorizontalAlignment="Left" Text="Accessible processor cores (by coreID)" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}"/>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <StackPanel>
-                            <CheckBox x:Name="checkBox1" Content="1" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" IsChecked="True" Click="CheckBoxClick"/>
-                            <CheckBox x:Name="checkBox2" Content="2" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox1" Content="0" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" IsChecked="True" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox2" Content="1" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
                         </StackPanel>
                         <StackPanel>
-                            <CheckBox x:Name="checkBox3" Content="3" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
-                            <CheckBox x:Name="checkBox4" Content="4" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox3" Content="2" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox4" Content="3" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
                         </StackPanel>
                         <StackPanel>
-                            <CheckBox x:Name="checkBox5" Content="5" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
-                            <CheckBox x:Name="checkBox6" Content="6" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox5" Content="4" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox6" Content="5" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
                         </StackPanel>
                         <StackPanel>
-                            <CheckBox x:Name="checkBox7" Content="7" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
-                            <CheckBox x:Name="checkBox8" Content="8" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox7" Content="6" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox8" Content="7" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
                         </StackPanel>
                         <StackPanel>
-                            <CheckBox x:Name="checkBox9" Content="9" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
-                            <CheckBox x:Name="checkBox10" Content="10" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox9" Content="8" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox10" Content="9" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
                         </StackPanel>
                         <StackPanel>
-                            <CheckBox x:Name="checkBox11" Content="11" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
-                            <CheckBox x:Name="checkBox12" Content="12" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox11" Content="10" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
+                            <CheckBox x:Name="checkBox12" Content="11" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
@@ -49,13 +49,13 @@
                         <TextBox x:Name="textBoxThreads" Text="1" TextWrapping="Wrap" FontSize="22" Width="390"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                        <Button Content="Calculate" Width="390" FontSize="22" Margin="260,0,0,0" Click="Button_Click"/>
+                        <Button x:Name="calculateBtn" Content="Calculate" Width="390" FontSize="22" Margin="260,0,0,0" Click="Button_Click"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Width="400">
                     <Border BorderThickness="1" BorderBrush="White">
                         <StackPanel Orientation="Vertical" Margin="10,10,10,10">
-                            <TextBlock x:Name="textBlockActiveProcessors" Text="Active processors: 1" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlockActiveProcessors" Text="Active processor cores: 1" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
                             <TextBlock x:Name="textBlockOutput" Text="Area for computed results" TextWrapping="Wrap" FontSize="18" Height="275" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
                         </StackPanel>
                     </Border>
