@@ -1,0 +1,46 @@
+﻿<Page
+    x:Class="PowerSplitServer.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerSplitServer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+    Loaded="PageLoaded">
+
+    <Grid>
+        <StackPanel x:Name="contentPanel" Orientation="Vertical" Margin="120,30,0,0">
+            <TextBlock x:Name="title" HorizontalAlignment="Left" Text="PowerSplit 5 Server" FontSize="36"/>
+            <StackPanel Orientation="Horizontal" Margin="0,40,0,20">
+                <StackPanel Orientation="Vertical" Width="400">
+                    <StackPanel x:Name="serverComputingPanel" Orientation="Vertical" Width="400" Margin="10,10,10,10" Height="50">
+                        <TextBlock x:Name="serverComputingText" Text="Server computing results:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="serverComputingTextPanel" Width="380" Margin="10,10,10,10">
+                        <Border BorderThickness="1" BorderBrush="White">
+                            <TextBlock x:Name="textBlockConputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="serverInfoPanel" Width="400">
+                    <StackPanel Orientation="Vertical" Margin="10,10,10,10" Height="50">
+                        <StackPanel x:Name="portPanel" Orientation="Horizontal">
+                            <TextBlock x:Name="portText" Text="Port:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,25,0"/>
+                            <TextBlock x:Name="port" Text="8000" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel x:Name="connectionsPanel" Orientation="Horizontal">
+                            <TextBlock x:Name="connectionsText" Text="Connections:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,20,0"/>
+                            <TextBlock x:Name="connections" Text="0" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel x:Name="serverInfoTextPanel" Width="380" Margin="10,10,10,10">
+                        <Border BorderThickness="1" BorderBrush="White">
+                            <TextBlock x:Name="textBlockInfoOutput" Text="Area for server info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

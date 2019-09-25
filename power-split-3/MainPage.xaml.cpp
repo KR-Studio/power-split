@@ -71,7 +71,7 @@ void thread_rect_square(Platform::String^ name, double width, double height) {
 	int squareNum = width * height;
 	std::wstring squareNumWstr = std::to_wstring(squareNum);
 	String^ squareNumPStr = ref new String(squareNumWstr.c_str());
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 	squares_map[name] = squareNumPStr;
 }
 
@@ -144,7 +144,7 @@ void PowerSplit::MainPage::ThreadControlsLoaded(Platform::Object^ sender, Window
 
 void PowerSplit::MainPage::StartTask1_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	rectangle1->Height = 190;
+	rectangle1->Height = 150;
 	std::thread thr(thread_rect_square, rectangle1->Name, rectangle1->Width, rectangle1->Height);
 	threads2.emplace_back(std::move(thr));
 	/*for (auto& thread : threads2) {
@@ -171,8 +171,8 @@ void PowerSplit::MainPage::StopTask1_Click(Platform::Object^ sender, Windows::UI
 	// Starting Thread & move the future object in lambda function by reference
 	std::thread th(&threadFunction, std::move(futureObj));
 	// Wait for 10 sec
-	std::this_thread::sleep_for(std::chrono::seconds(10));
-	OutputDebugString((LPCWSTR)"Asking Thread to Stop");
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	OutputDebugString((LPCWSTR)"Asking Thread to Stop \r\n");
 	// Set the value in promise
 	exitSignal.set_value();
 	// Wait for thread to join
@@ -210,7 +210,7 @@ void PowerSplit::MainPage::StopTask2_Click(Platform::Object^ sender, Windows::UI
 	std::thread th(&threadFunction, std::move(futureObj));
 	// Wait for 10 sec
 	std::this_thread::sleep_for(std::chrono::seconds(10));
-	OutputDebugString((LPCWSTR)"Asking Thread to Stop");
+	OutputDebugString((LPCWSTR)"Asking Thread to Stop \r\n");
 	// Set the value in promise
 	exitSignal.set_value();
 	// Wait for thread to join
@@ -248,7 +248,7 @@ void PowerSplit::MainPage::StopTask3_Click(Platform::Object^ sender, Windows::UI
 	std::thread th(&threadFunction, std::move(futureObj));
 	// Wait for 10 sec
 	std::this_thread::sleep_for(std::chrono::seconds(10));
-	OutputDebugString((LPCWSTR)"Asking Thread to Stop");
+	OutputDebugString((LPCWSTR)"Asking Thread to Stop \r\n");
 	// Set the value in promise
 	exitSignal.set_value();
 	// Wait for thread to join
@@ -286,7 +286,7 @@ void PowerSplit::MainPage::StopTask4_Click(Platform::Object^ sender, Windows::UI
 	std::thread th(&threadFunction, std::move(futureObj));
 	// Wait for 10 sec
 	std::this_thread::sleep_for(std::chrono::seconds(10));
-	OutputDebugString((LPCWSTR)"Asking Thread to Stop");
+	OutputDebugString((LPCWSTR)"Asking Thread to Stop \r\n");
 	// Set the value in promise
 	exitSignal.set_value();
 	// Wait for thread to join
@@ -323,7 +323,7 @@ void PowerSplit::MainPage::StopTask5_Click(Platform::Object^ sender, Windows::UI
 	std::thread th(&threadFunction, std::move(futureObj));
 	// Wait for 10 sec
 	std::this_thread::sleep_for(std::chrono::seconds(10));
-	OutputDebugString((LPCWSTR)"Asking Thread to Stop");
+	OutputDebugString((LPCWSTR)"Asking Thread to Stop \r\n");
 	// Set the value in promise
 	exitSignal.set_value();
 	// Wait for thread to join
