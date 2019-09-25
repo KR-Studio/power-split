@@ -175,14 +175,16 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 	double globalAverage = std::accumulate(averages.begin(), averages.end(), 0.0) / averages.size();
 
 	// Convert calculated average to Platform::String and output it
-	std::wstring averageWstr = std::to_wstring(globalAverage);
+
+	std::string averageStr = "\r\n Average: " + std::to_string(globalAverage);
+	std::wstring averageWstr = s2ws(averageStr);
 	String^ averagePstr = ref new String(averageWstr.c_str());
 	textBlockOutput->Text = averagePstr;
 
 
 	//Output execution time
 	double execTime = (double)(clock() - tStart) / CLOCKS_PER_SEC;
-	std::string execTimeStr = "/n Execution time: " + std::to_string(execTime) + "ms";
+	std::string execTimeStr = "\r\n Execution time: " + std::to_string(execTime) + "ms";
 	std::wstring execTimeWstr = s2ws(execTimeStr);
 	String^ execTimePstr = ref new String(execTimeWstr.c_str());
 	textBlockOutput->Text += execTimePstr;
