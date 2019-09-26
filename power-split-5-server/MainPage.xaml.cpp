@@ -193,12 +193,15 @@ void PowerSplitServer::MainPage::StartButtonClick(Platform::Object^ sender, Wind
 								closesocket(ClientSocket);
 								WSACleanup();
 							}
-
-							std::string iSendResultStr = "\r\nBytes sent: " + std::to_string(iSendResult);
-							textBlockInfoOutput->Text += s2ps(iSendResultStr);
+							else {
+								std::string iSendResultStr = "\r\nBytes sent: " + std::to_string(iSendResult);
+								textBlockInfoOutput->Text += s2ps(iSendResultStr);
+							}
 						}
 						else if (iResult == 0) {
 							textBlockInfoOutput->Text += "\r\nConnection closing...";
+							closesocket(ClientSocket);
+							WSACleanup();
 						}
 						else {
 							std::string WSAGetLastErrorStr = "\r\nRecv failed with error: " + std::to_string(WSAGetLastError());
