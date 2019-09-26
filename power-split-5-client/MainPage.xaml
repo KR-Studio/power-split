@@ -18,7 +18,9 @@
                     </StackPanel>
                     <StackPanel x:Name="serverComputingTextPanel" Width="380" Margin="10,10,10,10">
                         <Border BorderThickness="1" BorderBrush="White">
-                            <TextBlock x:Name="textBlockComputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            <ScrollViewer Height="220">
+                                <TextBlock x:Name="textBlockComputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            </ScrollViewer>
                         </Border>
                     </StackPanel>
                 </StackPanel>
@@ -61,7 +63,9 @@
                     <Button x:Name="disconenctBtn" Content="Disconnect" Width="380" FontSize="22" Margin="10,10,10,10" Click="DisconenctBtn_Click"></Button>
                     <StackPanel x:Name="serverInfoTextPanel" Width="380" Margin="10,10,10,10">
                         <Border BorderThickness="1" BorderBrush="White">
-                            <TextBlock x:Name="textBlockInfoOutput" Text="Area for server info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            <ScrollViewer Height="220">
+                                <TextBlock x:Name="textBlockInfoOutput" Text="Area for server info" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            </ScrollViewer>
                         </Border>
                     </StackPanel>
                     <Button x:Name="submitBtn" Content="Submit" Width="380" FontSize="22" Margin="10,110,10,10" Click="SubmitBtn_Click"></Button>
