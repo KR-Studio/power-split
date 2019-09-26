@@ -7,11 +7,16 @@
 
 #include "pch.h"
 #include "MainPage.xaml.h"
+#include "string"
+
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <iphlpapi.h>
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -19,7 +24,7 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT "8000"
 
 using namespace PowerSplitClient;
 
@@ -41,12 +46,12 @@ MainPage::MainPage()
 	InitializeComponent();
 }
 
-std::wstring s2ws(const std::string& str)
+std::wstring s2ws(const std::string& dataStr)
 {
-	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
-	std::wstring wstrTo(size_needed, 0);
-	MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
-	return wstrTo;
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &dataStr[0], (int)dataStr.size(), NULL, 0);
+	std::wstring dataWstr(size_needed, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &dataStr[0], (int)dataStr.size(), &dataWstr[0], size_needed);
+	return dataWstr;
 }
 
 String^ s2ps(const std::string& dataStr)
@@ -56,11 +61,21 @@ String^ s2ps(const std::string& dataStr)
 	return dataPstr;
 }
 
-std::string ps2s(String^& pStr)
+std::string ws2s(const std::wstring& dataWstr)
 {
-	std::wstring wStr(pStr->Begin());
-	std::string str(wStr.begin(), wStr.end());
-	return str;
+	auto dataWide = dataWstr.c_str();
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, dataWide, -1, nullptr, 0, NULL, NULL);
+	auto dataUtf8 = std::make_unique<char[]>(bufferSize);
+	if (0 == WideCharToMultiByte(CP_UTF8, 0, dataWide, -1, dataUtf8.get(), bufferSize, NULL, NULL))
+		throw std::exception("Can't convert string to UTF8");
+	return std::string(dataUtf8.get());
+}
+
+std::string ps2s(String^& dataPstr)
+{
+	std::wstring dataPstrWstr(dataPstr->Data());
+	auto dataStr = ws2s(dataPstrWstr);
+	return dataStr;
 }
 
 void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
@@ -78,14 +93,17 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 	//// Validate the parameters
 	//if (argc != 2) {
 	//	printf("usage: %s server-name\n", argv[0]);
-	//	return 1;
 	//}
 
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
-		printf("WSAStartup failed with error: %d\n", iResult);
-		return 1;
+		std::string iResultStr = "WSAStartup failed with error: " + std::to_string(iResult);
+		textBlockInfoOutput->Text = s2ps(iResultStr);
+	}
+	else {
+		std::string iResultStr = "WSAStartup return: " + std::to_string(iResult);
+		textBlockInfoOutput->Text = s2ps(iResultStr);
 	}
 
 	ZeroMemory(&hints, sizeof(hints));
@@ -95,18 +113,20 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 
 	// Resolve the server address and port
 
-	TextBox^ hostTextBox;
-	TextBox^ portTextBox;
-	String^ hostPStr = hostTextBox->Text->ToString();
-	String^ portPStr = portTextBox->Text->ToString();
+	String^ hostPStr = hostTextBox->Text;
+	String^ portPStr = portTextBox->Text;
 	std::string host = ps2s(hostPStr);
 	std::string port = ps2s(portPStr);
 
 	iResult = getaddrinfo(host.c_str(), port.c_str(), &hints, &result);
 	if (iResult != 0) {
-		printf("getaddrinfo failed with error: %d\n", iResult);
+		std::string iResultStr = "\r\nGetaddrinfo failed with error: " + std::to_string(iResult);
+		textBlockInfoOutput->Text += s2ps(iResultStr);
 		WSACleanup();
-		return 1;
+	}
+	else {
+		std::string iResultStr = "\r\nGetaddrinfo return: " + std::to_string(iResult);
+		textBlockInfoOutput->Text += s2ps(iResultStr);
 	}
 
 	// Attempt to connect to an address until one succeeds
@@ -116,9 +136,13 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
 			ptr->ai_protocol);
 		if (ConnectSocket == INVALID_SOCKET) {
-			printf("socket failed with error: %ld\n", WSAGetLastError());
+			std::string WSAGetLastErrorStr = "\r\nSocket failed with error: " + std::to_string(WSAGetLastError());
+			textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
 			WSACleanup();
-			return 1;
+		}
+		else {
+			std::string WSAGetLastErrorStr = "\r\nSocket return: " + std::to_string(WSAGetLastError());
+			textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
 		}
 
 		// Connect to server.
@@ -134,49 +158,58 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 	freeaddrinfo(result);
 
 	if (ConnectSocket == INVALID_SOCKET) {
-		printf("Unable to connect to server!\n");
+		textBlockInfoOutput->Text += "\r\nUnable to connect to server!";
 		WSACleanup();
-		return 1;
+	}
+	else {
+		textBlockInfoOutput->Text += "\r\nСonnection to server successful!";
 	}
 
 	// Send an initial buffer
 	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
 	if (iResult == SOCKET_ERROR) {
-		printf("send failed with error: %d\n", WSAGetLastError());
+		std::string WSAGetLastErrorStr = "\r\nSend failed with error: " + std::to_string(WSAGetLastError());
+		textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
 		closesocket(ConnectSocket);
 		WSACleanup();
-		return 1;
 	}
-
-	printf("Bytes Sent: %ld\n", iResult);
+	else {
+		std::string iResultStr = "\r\nBytes sent: " + std::to_string(iResult);
+		textBlockInfoOutput->Text += s2ps(iResultStr);
+	}
 
 	// shutdown the connection since no more data will be sent
 	iResult = shutdown(ConnectSocket, SD_SEND);
 	if (iResult == SOCKET_ERROR) {
-		printf("shutdown failed with error: %d\n", WSAGetLastError());
+		std::string WSAGetLastErrorStr = "\r\nShutdown failed with error: " + std::to_string(WSAGetLastError());
+		textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
 		closesocket(ConnectSocket);
 		WSACleanup();
-		return 1;
+	}
+	else {
+		std::string WSAGetLastErrorStr = "\r\nShutdown return: " + std::to_string(WSAGetLastError());
+		textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
 	}
 
 	// Receive until the peer closes the connection
 	do {
-
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0)
-			printf("Bytes received: %d\n", iResult);
-		else if (iResult == 0)
-			printf("Connection closed\n");
-		else
-			printf("recv failed with error: %d\n", WSAGetLastError());
-
+		if (iResult > 0) {
+			std::string iResultStr = "\r\nBytes received: " + std::to_string(iResult);
+			textBlockInfoOutput->Text += s2ps(iResultStr);
+		}
+		else if (iResult == 0) {
+			textBlockInfoOutput->Text += "\r\nConnection closed" + "\n";
+		}
+		else {
+			std::string WSAGetLastErrorStr = "\r\nRecv failed with error: " + std::to_string(WSAGetLastError()) + "\n";
+			textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
+		}
 	} while (iResult > 0);
 
 	// cleanup
 	closesocket(ConnectSocket);
 	WSACleanup();
-
-	return 0;
 }
 
 
