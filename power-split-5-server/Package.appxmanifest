@@ -30,7 +30,7 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="PowerSplit.App">
+      EntryPoint="PowerSplitServer.App">
       <uap:VisualElements
         DisplayName="PowerSplitServer"
         Square150x150Logo="Assets\Square150x150Logo.png"
