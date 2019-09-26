@@ -18,7 +18,7 @@ namespace PowerSplitClient
 		MainPage();
 
 	private:
-		void PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		int PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void CheckBox1_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void CheckBox2_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void CheckBox3_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
