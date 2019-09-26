@@ -30,3 +30,69 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 {
 
 }
+
+
+void PowerSplitClient::MainPage::CheckBox1_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::CheckBox2_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::CheckBox3_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::CheckBox4_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::CheckBox5_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::CheckBox6_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::CheckBox7_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::CheckBox8_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::DisconenctBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
+
+
+void PowerSplitClient::MainPage::SubmitBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+
+}
