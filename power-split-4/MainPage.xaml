@@ -55,8 +55,9 @@
                 <StackPanel Width="400">
                     <Border BorderThickness="1" BorderBrush="White">
                         <StackPanel Orientation="Vertical" Margin="10,10,10,10">
-                            <TextBlock x:Name="textBlockActiveProcessors" Text="Active processor cores: 1" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
-                            <TextBlock x:Name="textBlockOutput" Text="Area for computed results" TextWrapping="Wrap" FontSize="18" Height="275" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlockAccessibleProcessors" Text="Accessible processor cores number: 0" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlockActiveProcessors" Text="Active processor cores: 0" TextWrapping="Wrap" FontSize="18" Height="50" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlockOutput" Text="Area for computed results" TextWrapping="Wrap" FontSize="18" Height="225" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

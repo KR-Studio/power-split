@@ -45,17 +45,44 @@ std::wstring s2ws(const std::string& str)
 
 void PowerSplit::MainPage::Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	bool yrslvHardware = true;
-	// Check for YRSLVs Intel Core i5-7300HQ
-	if (yrslvHardware) {
-		checkBox5->IsEnabled = false;
-		checkBox6->IsEnabled = false;
-		checkBox7->IsEnabled = false;
-		checkBox8->IsEnabled = false;
-		checkBox9->IsEnabled = false;
-		checkBox10->IsEnabled = false;
-		checkBox11->IsEnabled = false;
-		checkBox12->IsEnabled = false;
+	CheckBox^ checkBoxes[] = { checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6,
+		checkBox7, checkBox8, checkBox9, checkBox10, checkBox11, checkBox12 };
+
+	int numberOfCores = std::thread::hardware_concurrency();
+	// change numberOfCores dataType from int to String^
+	std::wstring numberOfCoresWstr = std::to_wstring(numberOfCores);
+	String^ numberOfCoresPStr = ref new String(numberOfCoresWstr.c_str());
+	// output numberOfCores
+	textBlockAccessibleProcessors->Text = "Accessible processor cores number: " + numberOfCoresPStr;
+
+	switch (numberOfCores)
+	{
+	case 1: {
+		for(int i = 1; i < sizeof(checkBoxes)/sizeof(*checkBoxes); i++) {
+			checkBoxes[i]->IsEnabled = false;
+		}
+		break;
+	}
+	case 2: {
+		for (int i = 2; i < sizeof(checkBoxes) / sizeof(*checkBoxes); i++) {
+			checkBoxes[i]->IsEnabled = false;
+		}
+		break;
+	}
+	case 4: {
+		for (int i = 4; i < sizeof(checkBoxes) / sizeof(*checkBoxes); i++) {
+			checkBoxes[i]->IsEnabled = false;
+		}
+		break;
+	}
+	case 6: {
+		for (int i = 6; i < sizeof(checkBoxes) / sizeof(*checkBoxes); i++) {
+			checkBoxes[i]->IsEnabled = false;
+		}
+		break;
+	}
+	default:
+		break;
 	}
 }
 
@@ -113,7 +140,7 @@ void PowerSplit::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::
 
 			// adding information about currently active processor ids into checkBoxesActiveText
 			if (checkBoxesActiveText == "") {
-				checkBoxesActiveText += "Active processor cores: ";
+				checkBoxesActiveText += "Active processor cores by id: ";
 				checkBoxesActiveText += checkBoxActivePStr;
 			}
 			else {
@@ -186,7 +213,7 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 	double globalAverage = std::accumulate(averages.begin(), averages.end(), 0.0) / averages.size();
 
 	// Convert calculated average to Platform::String and output it
-	std::string averageStr = "\r\n Average: " + std::to_string(globalAverage);
+	std::string averageStr = "Average: " + std::to_string(globalAverage);
 	std::wstring averageWstr = s2ws(averageStr);
 	String^ averagePstr = ref new String(averageWstr.c_str());
 	textBlockOutput->Text = averagePstr;
@@ -194,7 +221,7 @@ void PowerSplit::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::X
 
 	//Output execution time
 	double execTime = (double)(clock() - tStart) / CLOCKS_PER_SEC;
-	std::string execTimeStr = "\r\n Execution time: " + std::to_string(execTime) + "ms";
+	std::string execTimeStr = "\r\nExecution time: " + std::to_string(execTime) + "ms";
 	std::wstring execTimeWstr = s2ws(execTimeStr);
 	String^ execTimePstr = ref new String(execTimeWstr.c_str());
 	textBlockOutput->Text += execTimePstr;
