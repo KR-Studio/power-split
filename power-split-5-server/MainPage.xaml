@@ -19,7 +19,7 @@
                     </StackPanel>
                     <StackPanel x:Name="serverComputingTextPanel" Width="380" Margin="10,10,10,10">
                         <Border BorderThickness="1" BorderBrush="White">
-                            <TextBlock x:Name="textBlockConputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            <TextBlock x:Name="textBlockComputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
                         </Border>
                     </StackPanel>
                 </StackPanel>
