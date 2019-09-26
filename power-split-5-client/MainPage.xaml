@@ -41,25 +41,30 @@
                     </StackPanel>
                     <StackPanel x:Name="settingsButtonsPanel" Orientation="Vertical" Margin="10,10,10,10">
                         <StackPanel x:Name="checkbox1Panel" Orientation="Horizontal" Margin="10,10,10,10">
-                            <CheckBox x:Name="checkBox1" Content="Add" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox1_Click"></CheckBox>
-                            <CheckBox x:Name="checkBox2" Content="Subtract" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox2_Click"></CheckBox>
-                            <CheckBox x:Name="checkBox3" Content="Multiply" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox3_Click"></CheckBox>
+                            <CheckBox x:Name="checkBox1" Content="Add" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox2" Content="Subtract" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox3" Content="Multiply" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
                         </StackPanel>
                         <StackPanel x:Name="checkbox2Panel" Orientation="Horizontal" Margin="10,10,10,10">
-                            <CheckBox x:Name="checkBox4" Content="Division" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox4_Click"></CheckBox>
-                            <CheckBox x:Name="checkBox5" Content="Sin" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox5_Click"></CheckBox>
-                            <CheckBox x:Name="checkBox6" Content="Cos" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox6_Click"></CheckBox>
+                            <CheckBox x:Name="checkBox4" Content="Division" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox5" Content="Sin" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox6" Content="Cos" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
                         </StackPanel>
                         <StackPanel x:Name="checkbox3Panel" Orientation="Horizontal" Margin="10,10,10,10">
-                            <CheckBox x:Name="checkBox7" Content="Tan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox7_Click"></CheckBox>
-                            <CheckBox x:Name="checkBox8" Content="Cotan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBox8_Click"></CheckBox>
+                            <CheckBox x:Name="checkBox7" Content="Tan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox8" Content="Cotan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel x:Name="buttonPanel" Width="400">
                     <Button x:Name="connectBtn" Content="Connect" Width="380" FontSize="22" Margin="10,10,10,10" Click="ConnectBtn_Click"></Button>
                     <Button x:Name="disconenctBtn" Content="Disconnect" Width="380" FontSize="22" Margin="10,10,10,10" Click="DisconenctBtn_Click"></Button>
-                    <Button x:Name="submitBtn" Content="Submit" Width="380" FontSize="22" Margin="10,350,10,10" Click="SubmitBtn_Click"></Button>
+                    <StackPanel x:Name="serverInfoTextPanel" Width="380" Margin="10,10,10,10">
+                        <Border BorderThickness="1" BorderBrush="White">
+                            <TextBlock x:Name="textBlockInfoOutput" Text="Area for server info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                        </Border>
+                    </StackPanel>
+                    <Button x:Name="submitBtn" Content="Submit" Width="380" FontSize="22" Margin="10,110,10,10" Click="SubmitBtn_Click"></Button>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

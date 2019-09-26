@@ -41,7 +41,29 @@ MainPage::MainPage()
 	InitializeComponent();
 }
 
-int PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+std::wstring s2ws(const std::string& str)
+{
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+	std::wstring wstrTo(size_needed, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+	return wstrTo;
+}
+
+String^ s2ps(const std::string& dataStr)
+{
+	std::wstring dataWstr = s2ws(dataStr);
+	String^ dataPstr = ref new String(dataWstr.c_str());
+	return dataPstr;
+}
+
+std::string ps2s(String^& pStr)
+{
+	std::wstring wStr(pStr->Begin());
+	std::string str(wStr.begin(), wStr.end());
+	return str;
+}
+
+void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
@@ -75,9 +97,12 @@ int PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI
 
 	TextBox^ hostTextBox;
 	TextBox^ portTextBox;
-	hostTextBox->Text->ToString();
-	portTextBox->Text->ToString();
-	iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
+	String^ hostPStr = hostTextBox->Text->ToString();
+	String^ portPStr = portTextBox->Text->ToString();
+	std::string host = ps2s(hostPStr);
+	std::string port = ps2s(portPStr);
+
+	iResult = getaddrinfo(host.c_str(), port.c_str(), &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
@@ -152,54 +177,6 @@ int PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI
 	WSACleanup();
 
 	return 0;
-}
-
-
-void PowerSplitClient::MainPage::CheckBox1_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
-}
-
-
-void PowerSplitClient::MainPage::CheckBox2_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
-}
-
-
-void PowerSplitClient::MainPage::CheckBox3_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
-}
-
-
-void PowerSplitClient::MainPage::CheckBox4_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
-}
-
-
-void PowerSplitClient::MainPage::CheckBox5_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
-}
-
-
-void PowerSplitClient::MainPage::CheckBox6_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
-}
-
-
-void PowerSplitClient::MainPage::CheckBox7_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
-}
-
-
-void PowerSplitClient::MainPage::CheckBox8_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
-{
-
 }
 
 
