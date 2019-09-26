@@ -20,20 +20,24 @@
                     <StackPanel x:Name="serverComputingTextPanel" Width="380" Margin="10,10,10,10">
                         <Border BorderThickness="1" BorderBrush="White">
                             <ScrollViewer Height="220">
-                                <TextBlock x:Name="textBlockComputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Height="200" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                                <TextBlock x:Name="textBlockComputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
                             </ScrollViewer>
                         </Border>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel x:Name="serverInfoPanel" Width="400">
-                    <StackPanel Orientation="Vertical" Margin="10,10,10,10" Height="50">
-                        <StackPanel x:Name="portPanel" Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical" Margin="10,10,10,10" Height="100">
+                        <StackPanel x:Name="portPanel" Orientation="Horizontal" Margin="10,0,10,0">
                             <TextBlock x:Name="portText" Text="Port:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,25,0"/>
-                            <TextBlock x:Name="port" Text="8000" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="port" Text="19860" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
                         </StackPanel>
-                        <StackPanel x:Name="connectionsPanel" Orientation="Horizontal">
+                        <StackPanel x:Name="connectionsPanel" Orientation="Horizontal" Margin="10,0,10,0">
                             <TextBlock x:Name="connectionsText" Text="Connections:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,20,0"/>
                             <TextBlock x:Name="connections" Text="0" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel x:Name="serverButtonsPanel" Orientation="Horizontal">
+                            <Button x:Name="connectBtn" Content="Start server" Width="170" FontSize="22" Margin="10,10,10,10" Click="StartButtonClick"></Button>
+                            <Button x:Name="disconenctBtn" Content="Close server" Width="170" FontSize="22" Margin="10,10,10,10" Click="CloseButtonClick"></Button>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel x:Name="serverInfoTextPanel" Width="380" Margin="10,10,10,10">
