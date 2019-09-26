@@ -6,7 +6,7 @@
 #include "pch.h"
 #include "MainPage.xaml.h"
 
-using namespace power_split_6_server;
+using namespace PowerSplitServer;
 
 using namespace Platform;
 using namespace Windows::Foundation;
