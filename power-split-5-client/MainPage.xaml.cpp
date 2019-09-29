@@ -106,124 +106,11 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 {
 	// Clearing server output area
 	textBlockInfoOutput->Text = "";
-
-	////// Validate the parameters
-	////if (argc != 2) {
-	////	printf("usage: %s server-name\n", argv[0]);
-	////}
-
-	//// Initialize Winsock
-	//iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	//if (iResult != 0) {
-	//	std::string iResultStr = "WSAStartup failed with error: " + std::to_string(iResult);
-	//	textBlockInfoOutput->Text = s2ps(iResultStr);
-	//}
-	//else {
-	//	std::string iResultStr = "WSAStartup return: " + std::to_string(iResult);
-	//	textBlockInfoOutput->Text = s2ps(iResultStr);
-
-	//	ZeroMemory(&hints, sizeof(hints));
-	//	hints.ai_family = AF_UNSPEC;
-	//	hints.ai_socktype = SOCK_STREAM;
-	//	hints.ai_protocol = IPPROTO_TCP;
-
-	//	// Resolve the server address and port
-
-	//	String^ hostPStr = hostTextBox->Text;
-	//	String^ portPStr = portTextBox->Text;
-	//	std::string host = ps2s(hostPStr);
-	//	std::string port = ps2s(portPStr);
-
-	//	iResult = getaddrinfo(host.c_str(), port.c_str(), &hints, &result);
-	//	if (iResult != 0) {
-	//		std::string iResultStr = "\r\nGetaddrinfo failed with error: " + std::to_string(iResult);
-	//		textBlockInfoOutput->Text += s2ps(iResultStr);
-	//		WSACleanup();
-	//	}
-	//	else {
-	//		std::string iResultStr = "\r\nGetaddrinfo return: " + std::to_string(iResult);
-	//		textBlockInfoOutput->Text += s2ps(iResultStr);
-	//	}
-	//}
-
-	if (Network::Initialize()) {
-		std::string dataStr = "WinSock API successfully initialized\r\n";
-		textBlockInfoOutput->Text += s2ps(dataStr);
-
-		Socket socket;
-
-		if (socket.Create() == NetResult::Net_Success)
-		{
-			std::string dataStr = "Socket successfully created\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-
-			socket.Close();
-			dataStr = "Socket successfully closed\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-		}
-		else
-		{
-			std::string dataStr = "Socket failed to create\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-		}
-	}
-	else {
-		std::string dataStr = "WSAStartup failed with error\r\n";
-		textBlockInfoOutput->Text += s2ps(dataStr);
-	}
 }
 
 
 void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	//// Attempt to connect to an address until one succeeds
-	//for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
-
-	//	// Create a SOCKET for connecting to server
-	//	ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-	//	if (ConnectSocket == INVALID_SOCKET) {
-	//		std::string WSAGetLastErrorStr = "\r\nSocket failed with error: " + std::to_string(WSAGetLastError());
-	//		textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
-	//		WSACleanup();
-	//	}
-	//	else {
-	//		std::string WSAGetLastErrorStr = "\r\nSocket return: " + std::to_string(WSAGetLastError());
-	//		textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
-
-	//		// Connect to server.
-	//		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
-	//		if (iResult == SOCKET_ERROR) {
-	//			closesocket(ConnectSocket);
-	//			ConnectSocket = INVALID_SOCKET;
-	//			continue;
-	//		}
-	//		else {
-	//			freeaddrinfo(result);
-
-	//			if (ConnectSocket == INVALID_SOCKET) {
-	//				textBlockInfoOutput->Text += "\r\nUnable to connect to server!";
-	//				WSACleanup();
-	//			}
-	//			else {
-	//				textBlockInfoOutput->Text += "\r\nСonnection to server successful!";
-
-	//				// Send an initial buffer
-	//				iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
-	//				if (iResult == SOCKET_ERROR) {
-	//					std::string WSAGetLastErrorStr = "\r\nSend failed with error: " + std::to_string(WSAGetLastError());
-	//					textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
-	//					closesocket(ConnectSocket);
-	//					WSACleanup();
-	//				}
-	//				else {
-	//					std::string iResultStr = "\r\nBytes sent: " + std::to_string(iResult);
-	//					textBlockInfoOutput->Text += s2ps(iResultStr);
-	//				}
-	//			}
-	//		}
-	//		break;
-	//	}
-	//}
 
 	if (Network::Initialize()) {
 		std::string dataStr = "WinSock API successfully initialized\r\n";
@@ -258,6 +145,17 @@ void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Wind
 			std::string dataStr = "Socket successfully created\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
 
+			if (socket.Connect(IPEndpoint("127.0.0.1", 80)) == NetResult::Net_Success)
+			{
+				std::string dataStr = "Succesfully connected to server!\r\n";
+				textBlockInfoOutput->Text += s2ps(dataStr);
+			}
+			else
+			{
+				std::string dataStr = "Failed to connect to server!\r\n";
+				textBlockInfoOutput->Text += s2ps(dataStr);
+			}
+
 			socket.Close();
 			dataStr = "Socket successfully closed\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
@@ -277,44 +175,8 @@ void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Wind
 
 void PowerSplitClient::MainPage::DisconenctBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
-	//// shutdown the connection since no more data will be sent
-	//iResult = shutdown(ConnectSocket, SD_SEND);
-	//if (iResult == SOCKET_ERROR) {
-	//	std::string WSAGetLastErrorStr = "\r\nShutdown failed with error: " + std::to_string(WSAGetLastError());
-	//	textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
-	//	closesocket(ConnectSocket);
-	//	WSACleanup();
-	//}
-	//else {
-	//	std::string WSAGetLastErrorStr = "\r\nShutdown return: " + std::to_string(WSAGetLastError());
-	//	textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
-
-	//	// Receive until the peer closes the connection
-	//	do {
-	//		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-	//		if (iResult > 0) {
-	//			std::string iResultStr = "\r\nBytes received: " + std::to_string(iResult);
-	//			textBlockInfoOutput->Text += s2ps(iResultStr);
-	//		}
-	//		else if (iResult == 0) {
-	//			textBlockInfoOutput->Text += "\r\nConnection closed" + "\n";
-
-	//			// cleanup
-	//			closesocket(ConnectSocket);
-	//			WSACleanup();
-	//		}
-	//		else {
-	//			std::string WSAGetLastErrorStr = "\r\nRecv failed with error: " + std::to_string(WSAGetLastError()) + "\n";
-	//			textBlockInfoOutput->Text += s2ps(WSAGetLastErrorStr);
-
-	//			// cleanup
-	//			closesocket(ConnectSocket);
-	//			WSACleanup();
-	//		}
-	//	} while (iResult > 0);
-	//}
-
 	Network::Shutdown();
+
 	std::string dataStr = "WinSock API successfully closed\r\n";
 	textBlockInfoOutput->Text += s2ps(dataStr);
 }

@@ -16,6 +16,8 @@ namespace PowerSplitNet
 		NetResult Close();
 		NetResult Bind(IPEndpoint endpoint);
 		NetResult Listen(IPEndpoint endpoint, int backlog = 5);
+		NetResult Accept(Socket& outsocket);
+		NetResult Connect(IPEndpoint endpoint);
 		SocketHandler GetHandler();
 		IPVersion GetIPVersion();
 	private:

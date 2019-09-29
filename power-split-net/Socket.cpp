@@ -88,6 +88,31 @@ namespace PowerSplitNet
 		return NetResult();
 	}
 
+	NetResult Socket::Accept(Socket& outsocket)
+	{
+		SocketHandler acceptedConnectionHandler = accept(handler, nullptr, nullptr);
+		if (acceptedConnectionHandler == INVALID_SOCKET)
+		{
+			int error = WSAGetLastError();
+			return NetResult::Net_NotYetImplemented;
+		}
+
+		outsocket = Socket(IPVersion::IPv4, acceptedConnectionHandler);
+		return NetResult::Net_Success;
+	}
+
+	NetResult Socket::Connect(IPEndpoint endpoint)
+	{
+		sockaddr_in addr = endpoint.GetSockaddrIPv4();
+		int result = connect(handler, (sockaddr*)(&addr), sizeof(sockaddr_in));
+		if (result != 0)
+		{
+			int error = WSAGetLastError();
+			return NetResult::Net_NotYetImplemented;
+		}
+		return NetResult::Net_Success;
+	}
+
 	SocketHandler Socket::GetHandler()
 	{
 		return handler;
