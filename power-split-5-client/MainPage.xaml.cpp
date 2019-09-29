@@ -149,6 +149,23 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 	if (Network::Initialize()) {
 		std::string dataStr = "WinSock API successfully initialized\r\n";
 		textBlockInfoOutput->Text += s2ps(dataStr);
+
+		Socket socket;
+
+		if (socket.Create() == NetResult::Net_Success)
+		{
+			std::string dataStr = "Socket successfully created\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+
+			socket.Close();
+			dataStr = "Socket successfully closed\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}
+		else
+		{
+			std::string dataStr = "Socket failed to create\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}
 	}
 	else {
 		std::string dataStr = "WSAStartup failed with error\r\n";
@@ -207,6 +224,54 @@ void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Wind
 	//		break;
 	//	}
 	//}
+
+	if (Network::Initialize()) {
+		std::string dataStr = "WinSock API successfully initialized\r\n";
+		textBlockInfoOutput->Text += s2ps(dataStr);
+
+		//IPEndpoint ip("www.google.com", 8080);
+		//if (ip.GetIpVersion() == IPVersion::IPv4)
+		//{
+		//	std::string dataStr = "Hostname: " + ip.GetHostname() + "\r\n";
+		//	textBlockInfoOutput->Text += s2ps(dataStr);
+		//	dataStr = "IP: " + ip.GetIpStr() + "\r\n";
+		//	textBlockInfoOutput->Text += s2ps(dataStr);
+		//	dataStr = "Port: " + std::to_string(ip.GetPort()) + "\r\n";
+		//	textBlockInfoOutput->Text += s2ps(dataStr);
+		//	dataStr = "Bytes... ";
+		//	for (auto& digit : ip.GetIpBytes())
+		//	{
+		//		dataStr += std::to_string((int)digit) + " ";
+		//	}
+		//	dataStr += "\r\n";
+		//	textBlockInfoOutput->Text += s2ps(dataStr);
+		//}
+		//else
+		//{
+		//	std::string dataStr = "Error occurs when trying to get access to non-IPv4 address\r\n";
+		//	textBlockInfoOutput->Text += s2ps(dataStr);
+		//}
+
+		Socket socket;
+		if (socket.Create() == NetResult::Net_Success)
+		{
+			std::string dataStr = "Socket successfully created\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+
+			socket.Close();
+			dataStr = "Socket successfully closed\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}
+		else
+		{
+			std::string dataStr = "Socket failed to create\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}
+	}
+	else {
+		std::string dataStr = "WSAStartup failed with error\r\n";
+		textBlockInfoOutput->Text += s2ps(dataStr);
+	}
 }
 
 
@@ -248,6 +313,10 @@ void PowerSplitClient::MainPage::DisconenctBtn_Click(Platform::Object^ sender, W
 	//		}
 	//	} while (iResult > 0);
 	//}
+
+	Network::Shutdown();
+	std::string dataStr = "WinSock API successfully closed\r\n";
+	textBlockInfoOutput->Text += s2ps(dataStr);
 }
 
 
