@@ -109,35 +109,35 @@ void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::U
 }
 
 
-void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 
 	if (Network::Initialize()) {
 		std::string dataStr = "WinSock API successfully initialized\r\n";
 		textBlockInfoOutput->Text += s2ps(dataStr);
 
-		//IPEndpoint ip("www.google.com", 8080);
-		//if (ip.GetIpVersion() == IPVersion::IPv4)
-		//{
-		//	std::string dataStr = "Hostname: " + ip.GetHostname() + "\r\n";
-		//	textBlockInfoOutput->Text += s2ps(dataStr);
-		//	dataStr = "IP: " + ip.GetIpStr() + "\r\n";
-		//	textBlockInfoOutput->Text += s2ps(dataStr);
-		//	dataStr = "Port: " + std::to_string(ip.GetPort()) + "\r\n";
-		//	textBlockInfoOutput->Text += s2ps(dataStr);
-		//	dataStr = "Bytes... ";
-		//	for (auto& digit : ip.GetIpBytes())
-		//	{
-		//		dataStr += std::to_string((int)digit) + " ";
-		//	}
-		//	dataStr += "\r\n";
-		//	textBlockInfoOutput->Text += s2ps(dataStr);
-		//}
-		//else
-		//{
-		//	std::string dataStr = "Error occurs when trying to get access to non-IPv4 address\r\n";
-		//	textBlockInfoOutput->Text += s2ps(dataStr);
-		//}
+		/*IPEndpoint ip("www.google.com", 8080);
+		if (ip.GetIpVersion() == IPVersion::IPv4)
+		{
+			std::string dataStr = "Hostname: " + ip.GetHostname() + "\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+			dataStr = "IP: " + ip.GetIpStr() + "\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+			dataStr = "Port: " + std::to_string(ip.GetPort()) + "\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+			dataStr = "Bytes... ";
+			for (auto& digit : ip.GetIpBytes())
+			{
+				dataStr += std::to_string((int)digit) + " ";
+			}
+			dataStr += "\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}
+		else
+		{
+			std::string dataStr = "Error occurs when trying to get access to non-IPv4 address\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}*/
 
 		Socket socket;
 		if (socket.Create() == NetResult::Net_Success)
@@ -146,6 +146,7 @@ void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Wind
 			textBlockInfoOutput->Text += s2ps(dataStr);
 
 			if (socket.Connect(IPEndpoint("192.168.43.83", 80)) == NetResult::Net_Success)
+			//if (socket.Connect(IPEndpoint("192.168.43.155", 80)) == NetResult::Net_Success)
 			{
 				std::string dataStr = "Succesfully connected to server!\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
@@ -173,7 +174,7 @@ void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Wind
 }
 
 
-void PowerSplitClient::MainPage::DisconenctBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+void PowerSplitClient::MainPage::DisconenctButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	Network::Shutdown();
 
@@ -182,7 +183,7 @@ void PowerSplitClient::MainPage::DisconenctBtn_Click(Platform::Object^ sender, W
 }
 
 
-void PowerSplitClient::MainPage::SubmitBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 
 }
