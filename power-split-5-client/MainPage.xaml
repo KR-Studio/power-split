@@ -59,8 +59,8 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel x:Name="buttonPanel" Width="400">
-                    <Button x:Name="connectBtn" Content="Connect" Width="380" FontSize="22" Margin="10,10,10,10" Click="ConnectBtn_Click"></Button>
-                    <Button x:Name="disconenctBtn" Content="Disconnect" Width="380" FontSize="22" Margin="10,10,10,10" Click="DisconenctBtn_Click"></Button>
+                    <Button x:Name="connectBtn" Content="Connect" Width="380" FontSize="22" Margin="10,10,10,10" Click="ConnectButtonClick"></Button>
+                    <Button x:Name="disconenctBtn" Content="Disconnect" Width="380" FontSize="22" Margin="10,10,10,10" Click="DisconenctButtonClick"></Button>
                     <StackPanel x:Name="serverInfoTextPanel" Width="380" Margin="10,10,10,10">
                         <Border BorderThickness="1" BorderBrush="White">
                             <ScrollViewer Height="220">
@@ -68,7 +68,7 @@
                             </ScrollViewer>
                         </Border>
                     </StackPanel>
-                    <Button x:Name="submitBtn" Content="Submit" Width="380" FontSize="22" Margin="10,110,10,10" Click="SubmitBtn_Click"></Button>
+                    <Button x:Name="submitBtn" Content="Submit" Width="380" FontSize="22" Margin="10,110,10,10" Click="SubmitButtonClick"></Button>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
