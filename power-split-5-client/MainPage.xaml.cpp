@@ -145,7 +145,7 @@ void PowerSplitClient::MainPage::ConnectBtn_Click(Platform::Object^ sender, Wind
 			std::string dataStr = "Socket successfully created\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
 
-			if (socket.Connect(IPEndpoint("127.0.0.1", 80)) == NetResult::Net_Success)
+			if (socket.Connect(IPEndpoint("192.168.43.83", 80)) == NetResult::Net_Success)
 			{
 				std::string dataStr = "Succesfully connected to server!\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);

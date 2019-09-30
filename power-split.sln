@@ -24,6 +24,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-net", "power-split-net\power-split-net.vcxproj", "{DF5F1E4C-10EF-4303-ABBB-9F47C6047342}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-5-server-cli", "power-split-5-server-cli\power-split-5-server-cli.vcxproj", "{95503D45-D807-4AD0-A7CA-073A6AFB0910}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF5F1E4C-10EF-4303-ABBB-9F47C6047342} = {DF5F1E4C-10EF-4303-ABBB-9F47C6047342}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
