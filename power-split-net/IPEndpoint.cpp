@@ -1,5 +1,6 @@
 #include "IPEndpoint.h"
 #include "assert.h"
+#include <iostream>
 
 namespace PowerSplitNet
 {
@@ -49,6 +50,19 @@ namespace PowerSplitNet
 		}
 	}
 
+	IPEndpoint::IPEndpoint(sockaddr* addr)
+	{
+		assert(addr->sa_family == AF_INET);
+		sockaddr_in* addrv4 = reinterpret_cast<sockaddr_in*>(addr);
+		ipVersion = IPVersion::IPv4;
+		port = ntohs(addrv4->sin_port);
+		ipBytes.resize(sizeof(ULONG));
+		memcpy(&ipBytes[0], &addrv4->sin_addr, sizeof(ULONG));
+		ipStr.resize(16);
+		inet_ntop(AF_INET, &addrv4->sin_addr, &ipStr[0], 16);
+		hostname = ipStr;
+	}
+
 	IPVersion IPEndpoint::GetIpVersion()
 	{
 		return ipVersion;
@@ -84,5 +98,45 @@ namespace PowerSplitNet
 		addr.sin_port = htons(port); // host to network by short
 
 		return addr;
+	}
+
+	void IPEndpoint::PrintIPInfo()
+	{
+		std::string dataStr = "New connection::";
+		std::cout << dataStr << std::endl;
+		switch (GetIpVersion())
+		{
+			case IPVersion::IPv4:
+			{
+				dataStr = "IP Version: IPv4";
+				std::cout << dataStr << std::endl;
+				break;
+			}
+			case IPVersion::IPv6:
+			{
+				dataStr = "IP Version: IPv6";
+				std::cout << dataStr << std::endl;
+				break;
+			}
+			default:
+			{
+				dataStr = "Error occurs when trying to get access to Unknown address protocol";
+				std::cout << dataStr << std::endl;
+			}
+		}
+		dataStr = "Hostname: " + GetHostname();
+		std::cout << dataStr << std::endl;
+		dataStr = "IP: " + GetIpStr();
+		std::cout << dataStr << std::endl;
+		dataStr = "Port: " + std::to_string(GetPort());
+		std::cout << dataStr << std::endl;
+		dataStr = "Bytes... ";
+		for (auto& digit : GetIpBytes())
+		{
+			dataStr += std::to_string((int)digit) + " ";
+		}
+		std::cout << dataStr << std::endl;
+
+		
 	}
 }

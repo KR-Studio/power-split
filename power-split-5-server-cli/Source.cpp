@@ -1,3 +1,7 @@
+#undef UNICODE
+
+#define WIN32_LEAN_AND_MEAN
+
 #include <string>
 #include <iostream>
 
@@ -45,11 +49,25 @@ int main()
 				std::string dataStr = "Socket successfully listening on port 80";
 				std::cout << dataStr << std::endl;
 
-				Socket newConnection;
+				Socket newConnection;	
 				if (socket.Accept(newConnection) == NetResult::Net_Success)
 				{
 					std::string dataStr = "New connection accepted";
 					std::cout << dataStr << std::endl;
+
+					char buffer[256];
+					int bytesRecieved = 0;
+					NetResult result = NetResult::Net_Success;
+					while (result == NetResult::Net_Success)
+					{
+						//result = newConnection.Receive(buffer, sizeof(buffer), bytesRecieved);
+						result = newConnection.ReceiveAll(buffer, sizeof(buffer));
+						if (result != NetResult::Net_Success)
+							break;
+						std::cout << "Data received: ";
+						std::string dataStr = buffer;
+						std::cout << dataStr << std::endl;
+					}
 
 					newConnection.Close();
 					dataStr = "NewConnectionSocket successfully closed";

@@ -145,11 +145,24 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 			std::string dataStr = "Socket successfully created\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
 
-			if (socket.Connect(IPEndpoint("192.168.43.83", 80)) == NetResult::Net_Success)
+			//if (socket.Connect(IPEndpoint("192.168.43.83", 80)) == NetResult::Net_Success)
 			//if (socket.Connect(IPEndpoint("192.168.43.155", 80)) == NetResult::Net_Success)
+			if (socket.Connect(IPEndpoint("127.0.0.1", 80)) == NetResult::Net_Success)
 			{
 				std::string dataStr = "Succesfully connected to server!\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
+
+				char buffer[256];
+				strcpy_s(buffer, "Hello Server from Client!\0");
+				int bytesSent = 0;
+				NetResult result = NetResult::Net_Success;
+				while (result == NetResult::Net_Success)
+				{
+					//result = socket.Send(buffer, sizeof(buffer), bytesSent);
+					result = socket.SendAll(buffer, sizeof(buffer));
+					std::string dataStr = "Attempting to send set of data...\r\n";
+					textBlockInfoOutput->Text += s2ps(dataStr);
+				}
 			}
 			else
 			{
