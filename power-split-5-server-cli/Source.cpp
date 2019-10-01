@@ -38,7 +38,7 @@ int main()
 		//	textBlockInfoOutput->Text += s2ps(dataStr);
 		//}
 
-		Socket socket;
+		NetSocket socket;
 		if (socket.Create() == NetResult::Net_Success)
 		{
 			std::string dataStr = "Socket successfully created";
@@ -49,7 +49,7 @@ int main()
 				std::string dataStr = "Socket successfully listening on port 80";
 				std::cout << dataStr << std::endl;
 
-				Socket newConnection;	
+				NetSocket newConnection;	
 				if (socket.Accept(newConnection) == NetResult::Net_Success)
 				{
 					std::string dataStr = "New connection accepted";
@@ -79,14 +79,14 @@ int main()
 								std::cout << "Data received: ";
 								std::string dataStr = '[' + std::to_string(bufferSize) + ']' + ' ' + buffer;
 								std::cout << dataStr << std::endl;
-								break;
+								//break;
 							}
 						}
 					}
 
-					newConnection.Close();
+					/*newConnection.Close();
 					dataStr = "NewConnectionSocket successfully closed";
-					std::cout << dataStr << std::endl;
+					std::cout << dataStr << std::endl;*/
 				}
 				else
 				{

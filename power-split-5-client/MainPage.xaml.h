@@ -21,6 +21,7 @@ namespace PowerSplitClient
 		void PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void ConnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void DisconenctButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void CheckBoxClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void SubmitButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }

@@ -3,8 +3,6 @@
 // Implementation of the MainPage class.
 //
 
-#define WIN32_LEAN_AND_MEAN
-
 #include "pch.h"
 #include "MainPage.xaml.h"
 #include "string"
@@ -50,6 +48,14 @@ MainPage::MainPage()
 	InitializeComponent();
 }
 
+
+// Vector with ids of processors that have activeState in checkBoxes
+std::vector<std::string> checkBoxesActive = { };
+// Main client Socket
+NetSocket socketListener;
+// Check connection with server
+NetResult ifConnected = NetResult::Net_NotYetImplemented;
+
 std::wstring s2ws(const std::string& dataStr)
 {
 	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &dataStr[0], (int)dataStr.size(), NULL, 0);
@@ -58,12 +64,14 @@ std::wstring s2ws(const std::string& dataStr)
 	return dataWstr;
 }
 
+
 String^ s2ps(const std::string& dataStr)
 {
 	std::wstring dataWstr = s2ws(dataStr);
 	String^ dataPstr = ref new String(dataWstr.c_str());
 	return dataPstr;
 }
+
 
 std::string ws2s(const std::wstring& dataWstr)
 {
@@ -75,6 +83,7 @@ std::string ws2s(const std::wstring& dataWstr)
 	return std::string(dataUtf8.get());
 }
 
+
 std::string ps2s(String^& dataPstr)
 {
 	std::wstring dataPstrWstr(dataPstr->Data());
@@ -82,11 +91,21 @@ std::string ps2s(String^& dataPstr)
 	return dataStr;
 }
 
+
+int ps2i(String^& dataPstr)
+{
+	std::wstring dataPstrWstr(dataPstr->Data());
+	auto dataInt = std::stoi(dataPstrWstr);
+	return dataInt;
+}
+
+
 std::wstring i2ws(const int& dataInt)
 {
 	std::wstring dataWstr = std::to_wstring(dataInt);
 	return dataWstr;
 }
+
 
 String^ i2ps(const int& dataInt)
 {
@@ -94,20 +113,12 @@ String^ i2ps(const int& dataInt)
 	return dataPstr;
 }
 
-//WSADATA wsaData;
-//SOCKET ConnectSocket = INVALID_SOCKET;
-//struct addrinfo* result = NULL, * ptr = NULL, hints;
-//char* sendbuf = "this is a test";
-//char recvbuf[DEFAULT_BUFLEN];
-//int iResult;
-//int recvbuflen = DEFAULT_BUFLEN;
 
 void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// Clearing server output area
 	textBlockInfoOutput->Text = "";
 }
-
 
 void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
@@ -139,16 +150,22 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 			textBlockInfoOutput->Text += s2ps(dataStr);
 		}*/
 
-		Socket socket;
-		if (socket.Create() == NetResult::Net_Success)
+		if (socketListener.Create() == NetResult::Net_Success)
 		{
 			std::string dataStr = "Socket successfully created\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
 
-			//if (socket.Connect(IPEndpoint("192.168.43.83", 80)) == NetResult::Net_Success)
-			//if (socket.Connect(IPEndpoint("192.168.43.155", 80)) == NetResult::Net_Success)
-			if (socket.Connect(IPEndpoint("127.0.0.1", 80)) == NetResult::Net_Success)
+			String^ ipPstr = hostTextBox->Text;
+			std::string ipStr = ps2s(ipPstr);
+			const char* ipChar = ipStr.c_str();
+
+			String^ portPstr = portTextBox->Text;
+			int portInt = ps2i(portPstr);
+
+			if (socketListener.Connect(IPEndpoint(ipChar, portInt)) == NetResult::Net_Success)
 			{
+				ifConnected = NetResult::Net_Success;
+
 				std::string dataStr = "Succesfully connected to server!\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
 
@@ -159,18 +176,19 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 				{
 					uint32_t bufferSize = buffer.size();
 					bufferSize = htonl(bufferSize); // host to network by long
-					result = socket.SendAll(&bufferSize, sizeof(uint32_t));
+					result = socketListener.SendAll(&bufferSize, sizeof(uint32_t));
 					if (result != NetResult::Net_Success)
 						break;
 					else
 					{
-						result = socket.SendAll(buffer.data(), buffer.size());
+						result = socketListener.SendAll(buffer.data(), buffer.size());
 						if (result != NetResult::Net_Success) 
 							break;
 						else
 						{
 							std::string dataStr = "Attempting to send set of data...\r\n";
 							textBlockInfoOutput->Text += s2ps(dataStr);
+							break;
 						}
 					}
 				}
@@ -180,10 +198,6 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 				std::string dataStr = "Failed to connect to server!\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
 			}
-
-			socket.Close();
-			dataStr = "Socket successfully closed\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
 		}
 		else
 		{
@@ -200,14 +214,107 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 
 void PowerSplitClient::MainPage::DisconenctButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	socketListener.Close();
+
+	ifConnected = NetResult::Net_NotYetImplemented;
+
+	std::string dataStr = "Socket successfully closed\r\n";
+	textBlockInfoOutput->Text += s2ps(dataStr);
+
 	Network::Shutdown();
 
-	std::string dataStr = "WinSock API successfully closed\r\n";
+	dataStr = "WinSock API successfully closed\r\n";
 	textBlockInfoOutput->Text += s2ps(dataStr);
+}
+
+
+void PowerSplitClient::MainPage::CheckBoxClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	// clearing Vector checkBoxesActive before using it to avoid copying 
+	checkBoxesActive.clear();
+
+	// Array with CheckBox^ checkBoxes
+	CheckBox^ checkBoxes[] = { checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7, checkBox8 };
+
+	// Checking active check boxes and writing it to vector
+	for each (CheckBox ^ checkBox in checkBoxes)
+	{
+		if (checkBox->IsChecked->Value == true) {
+			// change checkBox->Content dataType from String^ to int
+			String^ checkBoxContentPStr = checkBox->Content->ToString();
+			std::string checkBoxContentStr = ps2s(checkBoxContentPStr);
+
+			// inserting method into vector with active methods
+			checkBoxesActive.emplace_back(checkBoxContentStr);
+		}
+	}
 }
 
 
 void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	if (ifConnected == NetResult::Net_NotYetImplemented)
+	{
+		std::string dataStr = "Please first connect to server\r\n";
+		textBlockInfoOutput->Text += s2ps(dataStr);
+	}
+	else
+	{
+		std::string buffer = "";
 
+		if (checkBoxesActive.size() == 0)
+		{
+			std::string dataStr = "Please choose any method from checkBoxes\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}
+		else
+		{
+			String^ operand1Pstr = operand1TextBox->Text;
+			std::string operand1Str = ps2s(operand1Pstr);
+			//int operand1Int = ps2i(operand1Pstr);
+
+			String^ operand2Pstr = operand2TextBox->Text;
+			std::string operand2Str = ps2s(operand2Pstr);
+			//int operand2Int = ps2i(operand2Pstr);
+
+			std::string methodsStr = "";
+			for each (std::string checkBoxActive in checkBoxesActive)
+			{
+				if (methodsStr == "") {
+					methodsStr += checkBoxActive;
+				}
+				else
+				{
+					methodsStr += " " + checkBoxActive;
+				}
+			}
+
+			buffer += operand1Str + " " + operand2Str + " " + methodsStr;
+
+			NetResult result = NetResult::Net_Success;
+			while (result == NetResult::Net_Success)
+			{
+				uint32_t bufferSize = buffer.size();
+				bufferSize = htonl(bufferSize); // host to network by long
+				result = socketListener.SendAll(&bufferSize, sizeof(uint32_t));
+				if (result != NetResult::Net_Success)
+					break;
+				else
+				{
+					result = socketListener.SendAll(buffer.data(), buffer.size());
+					if (result != NetResult::Net_Success)
+						break;
+					else
+					{
+						std::string dataStr = "Attempting to send set of data...\r\n";
+						textBlockInfoOutput->Text += s2ps(dataStr);
+						break;
+					}
+				}
+			}
+
+			std::string dataStr = "Data have just sent to server\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+		}
+	}
 }

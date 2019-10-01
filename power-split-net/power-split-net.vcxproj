@@ -129,14 +129,14 @@
     <ClInclude Include="IPVersion.h" />
     <ClInclude Include="NetResult.h" />
     <ClInclude Include="Network.h" />
-    <ClInclude Include="Socket.h" />
+    <ClInclude Include="NetSocket.h" />
     <ClInclude Include="SocketHandler.h" />
     <ClInclude Include="SocketOption.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IPEndpoint.cpp" />
     <ClCompile Include="Network.cpp" />
-    <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="NetSocket.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
