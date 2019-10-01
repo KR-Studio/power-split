@@ -2,7 +2,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-#include "Socket.h"
+#include "NetSocket.h"
 #include "assert.h"
 #include <iostream>
 
@@ -14,13 +14,13 @@
 
 namespace PowerSplitNet
 {
-	Socket::Socket(IPVersion ipVersion, SocketHandler handler)
+	NetSocket::NetSocket(IPVersion ipVersion, SocketHandler handler)
 		:ipVersion(ipVersion), handler(handler)
 	{
 		assert(ipVersion == IPVersion::IPv4);
 	}
 
-	NetResult Socket::Create()
+	NetResult NetSocket::Create()
 	{
 		assert(ipVersion == IPVersion::IPv4);
 
@@ -46,7 +46,7 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::Close()
+	NetResult NetSocket::Close()
 	{
 		// Close the socket to release the resources associated
 		// Normally an application calls shutdown() before closesocket 
@@ -70,7 +70,7 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::Bind(IPEndpoint endpoint)
+	NetResult NetSocket::Bind(IPEndpoint endpoint)
 	{
 		sockaddr_in addr = endpoint.GetSockaddrIPv4();
 		int result = bind(handler, (sockaddr*)(&addr), sizeof(sockaddr_in));
@@ -83,7 +83,7 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::Listen(IPEndpoint endpoint, int backlog)
+	NetResult NetSocket::Listen(IPEndpoint endpoint, int backlog)
 	{
 		if (Bind(endpoint) != NetResult::Net_Success)
 		{
@@ -99,7 +99,7 @@ namespace PowerSplitNet
 		return NetResult();
 	}
 
-	NetResult Socket::Accept(Socket& outsocket)
+	NetResult NetSocket::Accept(NetSocket& outsocket)
 	{
 		sockaddr_in addr = {};
 		int length = sizeof(sockaddr_in);
@@ -111,11 +111,11 @@ namespace PowerSplitNet
 		}
 		IPEndpoint newConnectionEndpoint((sockaddr*)(&addr));
 		newConnectionEndpoint.PrintIPInfo();
-		outsocket = Socket(IPVersion::IPv4, acceptedConnectionHandler);
+		outsocket = NetSocket(IPVersion::IPv4, acceptedConnectionHandler);
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::Receive(void * dataDestination, int numberOfBytes, int & bytesRecieved)
+	NetResult NetSocket::Receive(void * dataDestination, int numberOfBytes, int & bytesRecieved)
 	{
 		bytesRecieved = recv(handler, (char *)dataDestination, numberOfBytes, 0);
 
@@ -133,7 +133,7 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::ReceiveAll(void * dataDestination, int numberOfBytes)
+	NetResult NetSocket::ReceiveAll(void * dataDestination, int numberOfBytes)
 	{
 		int totalBytesRecieved = 0;
 
@@ -152,7 +152,7 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::Connect(IPEndpoint endpoint)
+	NetResult NetSocket::Connect(IPEndpoint endpoint)
 	{
 		sockaddr_in addr = endpoint.GetSockaddrIPv4();
 		int result = connect(handler, (sockaddr*)(&addr), sizeof(sockaddr_in));
@@ -164,7 +164,7 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::Send(const void * dataSource, int numberOfBytes, int & bytesSent)
+	NetResult NetSocket::Send(const void * dataSource, int numberOfBytes, int & bytesSent)
 	{
 		bytesSent = send(handler, (const char*)dataSource, numberOfBytes, 0);
 		if (bytesSent == SOCKET_ERROR)
@@ -175,7 +175,7 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	NetResult Socket::SendAll(const void * dataSource, int numberOfBytes)
+	NetResult NetSocket::SendAll(const void * dataSource, int numberOfBytes)
 	{
 		int totalBytesSent = 0;
 
@@ -194,17 +194,17 @@ namespace PowerSplitNet
 		return NetResult::Net_Success;
 	}
 
-	SocketHandler Socket::GetHandler()
+	SocketHandler NetSocket::GetHandler()
 	{
 		return handler;
 	}
 
-	IPVersion Socket::GetIPVersion()
+	IPVersion NetSocket::GetIPVersion()
 	{
 		return ipVersion;
 	}
 
-	NetResult Socket::SetSocketOption(SocketOption option, BOOL value)
+	NetResult NetSocket::SetSocketOption(SocketOption option, BOOL value)
 	{
 		int result = 0;
 		switch (option)

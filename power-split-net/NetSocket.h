@@ -9,15 +9,15 @@
 
 namespace PowerSplitNet
 {
-	class Socket
+	class NetSocket
 	{
 	public:
-		Socket(IPVersion ipVersion = IPVersion::IPv4, SocketHandler handler = INVALID_SOCKET);
+		NetSocket(IPVersion ipVersion = IPVersion::IPv4, SocketHandler handler = INVALID_SOCKET);
 		NetResult Create();
 		NetResult Close();
 		NetResult Bind(IPEndpoint endpoint);
 		NetResult Listen(IPEndpoint endpoint, int backlog = 5);
-		NetResult Accept(Socket& outsocket);
+		NetResult Accept(NetSocket& outsocket);
 		NetResult Receive(void * dataDestination, int numberOfBytes, int & bytesRecieved);
 		NetResult ReceiveAll(void * dataDestination, int numberOfBytes);
 		NetResult Connect(IPEndpoint endpoint);
