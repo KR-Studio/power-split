@@ -152,16 +152,27 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 				std::string dataStr = "Succesfully connected to server!\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
 
-				char buffer[256];
-				strcpy_s(buffer, "Hello Server from Client!\0");
-				int bytesSent = 0;
+				std::string buffer = "Hello, Server!";
+
 				NetResult result = NetResult::Net_Success;
 				while (result == NetResult::Net_Success)
 				{
-					//result = socket.Send(buffer, sizeof(buffer), bytesSent);
-					result = socket.SendAll(buffer, sizeof(buffer));
-					std::string dataStr = "Attempting to send set of data...\r\n";
-					textBlockInfoOutput->Text += s2ps(dataStr);
+					uint32_t bufferSize = buffer.size();
+					bufferSize = htonl(bufferSize); // host to network by long
+					result = socket.SendAll(&bufferSize, sizeof(uint32_t));
+					if (result != NetResult::Net_Success)
+						break;
+					else
+					{
+						result = socket.SendAll(buffer.data(), buffer.size());
+						if (result != NetResult::Net_Success) 
+							break;
+						else
+						{
+							std::string dataStr = "Attempting to send set of data...\r\n";
+							textBlockInfoOutput->Text += s2ps(dataStr);
+						}
+					}
 				}
 			}
 			else

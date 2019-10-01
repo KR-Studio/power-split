@@ -55,18 +55,33 @@ int main()
 					std::string dataStr = "New connection accepted";
 					std::cout << dataStr << std::endl;
 
-					char buffer[256];
-					int bytesRecieved = 0;
+					std::string buffer = "";
 					NetResult result = NetResult::Net_Success;
 					while (result == NetResult::Net_Success)
 					{
-						//result = newConnection.Receive(buffer, sizeof(buffer), bytesRecieved);
-						result = newConnection.ReceiveAll(buffer, sizeof(buffer));
+						uint32_t bufferSize = buffer.size();
+						result = newConnection.ReceiveAll(&bufferSize, sizeof(uint32_t));
 						if (result != NetResult::Net_Success)
 							break;
-						std::cout << "Data received: ";
-						std::string dataStr = buffer;
-						std::cout << dataStr << std::endl;
+						else
+						{
+							bufferSize = ntohl(bufferSize); // network to host by long
+
+							if (bufferSize > PowerSplitNet::MAX_PACKETSIZE)
+								break;
+
+							buffer.resize(bufferSize);
+							result = newConnection.ReceiveAll(&buffer[0], bufferSize);
+							if (result != NetResult::Net_Success)
+								break;
+							else
+							{
+								std::cout << "Data received: ";
+								std::string dataStr = '[' + std::to_string(bufferSize) + ']' + ' ' + buffer;
+								std::cout << dataStr << std::endl;
+								break;
+							}
+						}
 					}
 
 					newConnection.Close();
