@@ -136,6 +136,9 @@ int main()
 								
 								//break;
 
+								std::cout << "Result successfully sent to client.";
+
+
 								NetResult result = NetResult::Net_Success;
 								while (result == NetResult::Net_Success)
 								{
