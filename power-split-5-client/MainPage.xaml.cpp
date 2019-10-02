@@ -55,6 +55,8 @@ std::vector<std::string> checkBoxesActive = { };
 NetSocket socketListener;
 // Check connection with server
 NetResult ifConnected = NetResult::Net_NotYetImplemented;
+// Check operands
+int operandsActive = 0;
 
 std::wstring s2ws(const std::string& dataStr)
 {
@@ -271,10 +273,16 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 		{
 			String^ operand1Pstr = operand1TextBox->Text;
 			std::string operand1Str = ps2s(operand1Pstr);
+			if (operand1Str == "") {
+				operand1Str = "0";
+			}
 			//int operand1Int = ps2i(operand1Pstr);
 
 			String^ operand2Pstr = operand2TextBox->Text;
 			std::string operand2Str = ps2s(operand2Pstr);
+			if (operand2Str == "") {
+				operand2Str = "0";
+			}
 			//int operand2Int = ps2i(operand2Pstr);
 
 			std::string methodsStr = "";

@@ -4,8 +4,11 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 #include <power-split-net/Including.h>
+#include <list>
+#include <iterator>
 
 using namespace PowerSplitNet;
 
@@ -79,7 +82,40 @@ int main()
 								std::cout << "Data received: ";
 								std::string dataStr = '[' + std::to_string(bufferSize) + ']' + ' ' + buffer;
 								std::cout << dataStr << std::endl;
+
+								std::vector<std::string> dataWordsStr;
+								std::istringstream ist(dataStr);
+								std::string tmp;
+								while (ist >> tmp)
+									dataWordsStr.emplace_back(tmp);
+
+								//std::cout << "Words:" << std::endl;
+								//for (int i = 3; i < dataWordsStr.size(); ++i)
+								//	std::cout << dataWordsStr[i] << ' ';
+								
 								//break;
+
+								NetResult result = NetResult::Net_Success;
+								while (result == NetResult::Net_Success)
+								{
+									uint32_t bufferSize = buffer.size();
+									bufferSize = htonl(bufferSize); // host to network by long
+									result = socket.SendAll(&bufferSize, sizeof(uint32_t));
+									if (result != NetResult::Net_Success)
+										break;
+									else
+									{
+										result = socket.SendAll(buffer.data(), buffer.size());
+										if (result != NetResult::Net_Success)
+											break;
+										else
+										{
+											std::string dataStr = "Attempting to send set of data...";
+												std::cout << dataStr << std::endl;
+											break;
+										}
+									}
+								}
 							}
 						}
 					}
