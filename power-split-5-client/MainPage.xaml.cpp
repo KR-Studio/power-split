@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "MainPage.xaml.h"
 #include "string"
+#include <sstream>
 
 #include <power-split-net/Including.h>
 
@@ -49,7 +50,7 @@ MainPage::MainPage()
 }
 
 
-// Vector with ids of processors that have activeState in checkBoxes
+// Vector with methods that have activeState in checkBoxes
 std::vector<std::string> checkBoxesActive = { };
 // Main client Socket
 NetSocket socketListener;
@@ -102,6 +103,14 @@ int ps2i(String^& dataPstr)
 }
 
 
+double ps2d(String^& dataPstr)
+{
+	std::wstring dataPstrWstr(dataPstr->Data());
+	auto dataDouble = std::stod(dataPstrWstr);
+	return dataDouble;
+}
+
+
 std::wstring i2ws(const int& dataInt)
 {
 	std::wstring dataWstr = std::to_wstring(dataInt);
@@ -116,10 +125,60 @@ String^ i2ps(const int& dataInt)
 }
 
 
+double add(double op1, double op2) {
+	double sum = op1 + op2;
+	return sum;
+}
+
+
+double subtract(double op1, double op2) {
+	double diff = op1 - op2;
+	return diff;
+}
+
+
+double multiply(double op1, double op2) {
+	double product = op1 * op2;
+	return product;
+}
+
+
+double divide(double op1, double op2) {
+	double result = op1 / op2;
+	return result;
+}
+
+
+double sine(double op) {
+	double result = sin(op);
+	return result;
+}
+
+
+double tang(double op) {
+	double result = tan(op);
+	return result;
+}
+
+
+double cosine(double op) {
+	double result = cos(op);
+	return result;
+}
+
+
+double cotang(double op) {
+	double result = 1 / tan(op);
+	return result;
+}
+
+
 void PowerSplitClient::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// Clearing server output area
 	textBlockInfoOutput->Text = "";
+	// Clearing computing output area
+	textBlockComputingOutput->Text = "";
 }
 
 void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
@@ -277,6 +336,7 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 				operand1Str = "0";
 			}
 			//int operand1Int = ps2i(operand1Pstr);
+			double operand1Double = ps2d(operand1Pstr);
 
 			String^ operand2Pstr = operand2TextBox->Text;
 			std::string operand2Str = ps2s(operand2Pstr);
@@ -284,6 +344,7 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 				operand2Str = "0";
 			}
 			//int operand2Int = ps2i(operand2Pstr);
+			double operand2Double = ps2d(operand2Pstr);
 
 			std::string methodsStr = "";
 			for each (std::string checkBoxActive in checkBoxesActive)
@@ -321,8 +382,135 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 				}
 			}
 
-			std::string dataStr = "Data have just sent to server\r\n";
+			std::string dataStr = "Data has just been sent to the server\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
+
+			dataStr = "Data has just been received from the server\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
+
+			for each (std::string checkBoxActive in checkBoxesActive)
+			{
+				if (checkBoxActive == "Add")
+				{
+					std::string dataStr = "Result of Add: ";
+					dataStr += std::to_string(add(operand1Double, operand2Double)) + "\r\n";
+					textBlockComputingOutput->Text += s2ps(dataStr);
+				}
+				else
+				{
+					if (checkBoxActive == "Subtract")
+					{
+						std::string dataStr = "Result of Subtract: ";
+						dataStr += std::to_string(subtract(operand1Double, operand2Double)) + "\r\n";
+						textBlockComputingOutput->Text += s2ps(dataStr);
+					}
+					else 
+					{
+						if (checkBoxActive == "Multiply")
+						{
+							std::string dataStr = "Result of Multiply: ";
+							dataStr += std::to_string(multiply(operand1Double, operand2Double)) + "\r\n";
+							textBlockComputingOutput->Text += s2ps(dataStr);
+						}
+						else
+						{
+							if (checkBoxActive == "Divide")
+							{
+								std::string dataStr = "Result of Divide: ";
+								dataStr += std::to_string(divide(operand1Double, operand2Double)) + "\r\n";
+								textBlockComputingOutput->Text += s2ps(dataStr);
+							}
+							else
+							{
+								if (checkBoxActive == "Sin")
+								{
+									std::string dataStr = "Result of Sin (operand1): ";
+									dataStr += std::to_string(sine(operand1Double)) + "\r\n";
+									dataStr += "Result of Sin (operand2): ";
+									dataStr += std::to_string(sine(operand2Double)) + "\r\n";
+									textBlockComputingOutput->Text += s2ps(dataStr);
+								}
+								else
+								{
+									if (checkBoxActive == "Cos")
+									{
+										std::string dataStr = "Result of Cos (operand1): ";
+										dataStr += std::to_string(cosine(operand1Double)) + "\r\n";
+										dataStr += "Result of Cos (operand2): ";
+										dataStr += std::to_string(cosine(operand2Double)) + "\r\n";
+										textBlockComputingOutput->Text += s2ps(dataStr);
+									}
+									else
+									{
+										if (checkBoxActive == "Tan")
+										{
+											std::string dataStr = "Result of Tan (operand1): ";
+											dataStr += std::to_string(tang(operand1Double)) + "\r\n";
+											dataStr += "Result of Tan (operand2): ";
+											dataStr += std::to_string(tang(operand2Double)) + "\r\n";
+											textBlockComputingOutput->Text += s2ps(dataStr);
+										}
+										else
+										{
+											if (checkBoxActive == "Cotan")
+											{
+												std::string dataStr = "Result of Cotan (operand1): ";
+												dataStr += std::to_string(cotang(operand1Double)) + "\r\n";
+												dataStr += "Result of Cotan (operand2): ";
+												dataStr += std::to_string(cotang(operand2Double)) + "\r\n";
+												textBlockComputingOutput->Text += s2ps(dataStr);
+											}
+											else
+											{
+												std::string dataStr = "Error result!";
+												textBlockComputingOutput->Text += s2ps(dataStr);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			NetResult result1 = NetResult::Net_Success;
+			while (result == NetResult::Net_Success)
+			{
+				break; uint32_t bufferSize = buffer.size();
+				result1 = socketListener.ReceiveAll(&bufferSize, sizeof(uint32_t));
+				if (result1 != NetResult::Net_Success)
+					break;
+				else
+				{
+					bufferSize = ntohl(bufferSize); // network to host by long
+
+					if (bufferSize > PowerSplitNet::MAX_PACKETSIZE)
+						break;
+
+					buffer.resize(bufferSize);
+					result1 = socketListener.ReceiveAll(&buffer[0], bufferSize);
+					if (result1 != NetResult::Net_Success)
+						break;
+					else
+					{
+						std::string dataStr = "Data received: ";
+						dataStr += '[' + std::to_string(bufferSize) + ']' + ' ' + buffer;
+
+						std::vector<std::string> dataWordsStr;
+						std::istringstream ist(dataStr);
+						std::string tmp;
+						while (ist >> tmp)
+							dataWordsStr.emplace_back(tmp);
+
+						//std::cout << "Words:" << std::endl;
+						//for (int i = 3; i < dataWordsStr.size(); ++i)
+						//	std::cout << dataWordsStr[i] << ' ';
+
+						//break;
+					}
+				}
+			}
 		}
 	}
 }
