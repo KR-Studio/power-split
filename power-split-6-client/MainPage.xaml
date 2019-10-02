@@ -6,9 +6,87 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="PageLoaded">
 
     <Grid>
-
+        <StackPanel x:Name="contentPanel" Orientation="Vertical" Margin="120,30,0,0">
+            <TextBlock x:Name="title" HorizontalAlignment="Left" Text="PowerSplit 6 Client" FontSize="36"/>
+            <StackPanel Orientation="Horizontal" Margin="0,40,0,20">
+                <StackPanel x:Name="serverInfoPanel" Orientation="Vertical" Width="400">
+                    <StackPanel x:Name="serverComputingPanel" Orientation="Vertical" Width="400" Margin="10,10,10,10" Height="50">
+                        <TextBlock x:Name="serverComputingText" Text="Server computing results:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="serverComputingTextPanel" Width="380" Margin="10,10,10,10">
+                        <Border BorderThickness="1" BorderBrush="White">
+                            <ScrollViewer Height="220">
+                                <TextBlock x:Name="textBlockComputingOutput" Text="Area for computing info" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="settingsPanel" Width="400">
+                    <StackPanel x:Name="hostSettingsPanel" Orientation="Horizontal" Margin="10,10,10,10">
+                        <TextBlock x:Name="hostTextBlock" Text="Host:" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Width="100" Margin="10,10,10,10"></TextBlock>
+                        <TextBox x:Name="hostTextBox" Text="127.0.0.1" Width="240" TextWrapping="Wrap" FontSize="18" Margin="0,10,10,10"/>
+                    </StackPanel>
+                    <StackPanel x:Name="portSettingsPanel" Orientation="Horizontal" Margin="10,10,10,10">
+                        <TextBlock x:Name="portTextBlock" Text="Port:" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Width="100" Margin="10,10,10,10"></TextBlock>
+                        <TextBox  x:Name="portTextBox" Text="19860" Width="240" TextWrapping="Wrap" FontSize="18" Margin="0,10,10,10"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="buttonPanel" Width="400">
+                    <Button x:Name="connectBtn" Content="Connect" Width="380" FontSize="22" Margin="10,10,10,10" Click="ConnectBtn_Click"></Button>
+                    <Button x:Name="disconenctBtn" Content="Disconnect" Width="380" FontSize="22" Margin="10,10,10,10" Click="DisconenctBtn_Click"></Button>
+                    <StackPanel x:Name="serverInfoTextPanel" Width="380" Margin="10,10,10,10">
+                        <Border BorderThickness="1" BorderBrush="White">
+                            <ScrollViewer Height="150">
+                                <TextBlock x:Name="textBlockInfoOutput" Text="Area for server info" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="10,10,10,10"/>
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,40,0,20">
+                <Border BorderThickness="1" BorderBrush="White">
+                    <StackPanel x:Name="generalSquarePanel" Orientation="Vertical" Margin="0,40,0,20">
+                        <TextBlock x:Name="generalSquareText" TextWrapping="Wrap" Margin="20,10,20,10" Text="General square in cm^2:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                        <TextBlock x:Name="generalSquareValue" TextWrapping="Wrap" Margin="20,10,20,10" Text="0" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                        <TextBlock x:Name="tasksSquareText" TextWrapping="Wrap" Margin="20,55,20,10" Text="Rectangle squares in cm^2" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                    </StackPanel>
+                </Border>
+                <StackPanel x:Name="taskControlsPanel" Orientation="Horizontal" Margin="0,40,0,20">
+                    <StackPanel x:Name="taskControl1Panel" Orientation="Vertical" Margin="20,0,20,0" Width="84">
+                        <TextBlock x:Name="taskControl1Text" TextWrapping="Wrap" Text="Thread 1 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
+                        <Button x:Name="startTask1" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask1_Click"/>
+                        <Button x:Name="stopTask1" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask1_Click"/>
+                        <TextBlock x:Name="taskControl1Square" TextWrapping="Wrap" Text="0" Margin="0,10,0,0" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="taskControl2Panel" Orientation="Vertical" Margin="20,0,20,0" Width="86">
+                        <TextBlock x:Name="taskControl2Text" TextWrapping="Wrap" Text="Thread 2 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
+                        <Button x:Name="startTask2" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask2_Click"/>
+                        <Button x:Name="stopTask2" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask2_Click"/>
+                        <TextBlock x:Name="taskControl2Square" TextWrapping="Wrap" Text="0" Margin="0,10,0,0" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="taskControl3Panel" Orientation="Vertical" Margin="20,0,20,0" Width="86">
+                        <TextBlock x:Name="taskControl3Text" TextWrapping="Wrap" Text="Thread 3 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
+                        <Button x:Name="startTask3" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask3_Click"/>
+                        <Button x:Name="stopTask3" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask3_Click"/>
+                        <TextBlock x:Name="taskControl3Square" TextWrapping="Wrap" Text="0" Margin="0,10,0,0" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="taskControl4Panel" Orientation="Vertical" Margin="20,0,20,0" Width="87">
+                        <TextBlock x:Name="taskControl4Text" TextWrapping="Wrap" Text="Thread 4 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
+                        <Button x:Name="startTask4" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask4_Click"/>
+                        <Button x:Name="stopTask4" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask4_Click"/>
+                        <TextBlock x:Name="taskControl4Square" TextWrapping="Wrap" Text="0" Margin="0,10,0,0" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="taskControl5Panel" Orientation="Vertical" Margin="20,0,20,0" Width="87">
+                        <TextBlock x:Name="taskControl5Text" TextWrapping="Wrap" Text="Thread 5 controls:" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}" Loaded="ThreadControlsLoaded"/>
+                        <Button x:Name="startTask5" Content="Start" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StartTask5_Click"/>
+                        <Button x:Name="stopTask5" Content="Stop" Margin="0,10,0,0" HorizontalAlignment="Center" Click="StopTask5_Click"/>
+                        <TextBlock x:Name="taskControl5Square" TextWrapping="Wrap" Text="0" Margin="0,10,0,0" FontSize="18" HorizontalAlignment="Center" Style="{ThemeResource BaseTextBlockStyle}"></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>

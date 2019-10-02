@@ -5,12 +5,53 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-
+#include <math.h>  
+#include <cmath>
 #include <power-split-net/Including.h>
 #include <list>
 #include <iterator>
 
 using namespace PowerSplitNet;
+
+double add(double op1, double op2) {
+	double sum = op1 + op2;
+	return sum;
+}
+
+double subtract(double op1, double op2) {
+	double diff = op1 - op2;
+	return diff;
+}
+
+double multiply(double op1, double op2) {
+	double product = op1 * op2;
+	return product;
+}
+
+double divide(double op1, double op2) {
+	double result = op1 / op2;
+	return result;
+}
+
+double sine(double op) {
+	double result = sin(op);
+	return result;
+}
+
+double tang(double op) {
+	double result = tan(op);
+	return result;
+}
+
+double cosine(double op) {
+	double result = cos(op);
+	return result;
+}
+
+double cotang(double op) {
+	double result = 1 / tan(op);
+	return result;
+}
 
 int main()
 {
