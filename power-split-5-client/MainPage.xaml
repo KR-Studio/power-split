@@ -31,7 +31,7 @@
                     </StackPanel>
                     <StackPanel x:Name="portSettingsPanel" Orientation="Horizontal" Margin="10,10,10,10">
                         <TextBlock x:Name="portTextBlock" Text="Port:" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Width="100" Margin="10,10,10,10"></TextBlock>
-                        <TextBox  x:Name="portTextBox" Text="19860" Width="240" TextWrapping="Wrap" FontSize="18" Margin="0,10,10,10"/>
+                        <TextBox  x:Name="portTextBox" Text="80" Width="240" TextWrapping="Wrap" FontSize="18" Margin="0,10,10,10"/>
                     </StackPanel>
                     <StackPanel x:Name="operand1Panel" Orientation="Horizontal" Margin="10,10,10,10">
                         <TextBlock x:Name="operand1TextBlock" Text="Operand 1:" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Width="100" Margin="10,10,10,10"></TextBlock>
@@ -39,28 +39,28 @@
                     </StackPanel>
                     <StackPanel x:Name="operand2Panel" Orientation="Horizontal" Margin="10,10,10,10">
                         <TextBlock x:Name="operand2TextBlock" Text="Operand 2:" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Width="100" Margin="10,10,10,10"></TextBlock>
-                        <TextBox x:Name="operand2TextBox" Text="" Width="240" TextWrapping="Wrap" FontSize="18" Margin="0,10,10,10"/>
+                        <TextBox x:Name="operand2TextBox" Text="0" Width="240" TextWrapping="Wrap" FontSize="18" Margin="0,10,10,10"/>
                     </StackPanel>
                     <StackPanel x:Name="settingsButtonsPanel" Orientation="Vertical" Margin="10,10,10,10">
                         <StackPanel x:Name="checkbox1Panel" Orientation="Horizontal" Margin="10,10,10,10">
-                            <CheckBox x:Name="checkBox1" Content="Add" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
-                            <CheckBox x:Name="checkBox2" Content="Subtract" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
-                            <CheckBox x:Name="checkBox3" Content="Multiply" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox1" Content="Add" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
+                            <CheckBox x:Name="checkBox2" Content="Subtract" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
+                            <CheckBox x:Name="checkBox3" Content="Multiply" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
                         </StackPanel>
                         <StackPanel x:Name="checkbox2Panel" Orientation="Horizontal" Margin="10,10,10,10">
-                            <CheckBox x:Name="checkBox4" Content="Division" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
-                            <CheckBox x:Name="checkBox5" Content="Sin" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
-                            <CheckBox x:Name="checkBox6" Content="Cos" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox4" Content="Division" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
+                            <CheckBox x:Name="checkBox5" Content="Sin" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
+                            <CheckBox x:Name="checkBox6" Content="Cos" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
                         </StackPanel>
                         <StackPanel x:Name="checkbox3Panel" Orientation="Horizontal" Margin="10,10,10,10">
-                            <CheckBox x:Name="checkBox7" Content="Tan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
-                            <CheckBox x:Name="checkBox8" Content="Cotan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18"></CheckBox>
+                            <CheckBox x:Name="checkBox7" Content="Tan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
+                            <CheckBox x:Name="checkBox8" Content="Cotan" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel x:Name="buttonPanel" Width="400">
-                    <Button x:Name="connectBtn" Content="Connect" Width="380" FontSize="22" Margin="10,10,10,10" Click="ConnectBtn_Click"></Button>
-                    <Button x:Name="disconenctBtn" Content="Disconnect" Width="380" FontSize="22" Margin="10,10,10,10" Click="DisconenctBtn_Click"></Button>
+                    <Button x:Name="connectBtn" Content="Connect" Width="380" FontSize="22" Margin="10,10,10,10" Click="ConnectButtonClick"></Button>
+                    <Button x:Name="disconenctBtn" Content="Disconnect" Width="380" FontSize="22" Margin="10,10,10,10" Click="DisconenctButtonClick"></Button>
                     <StackPanel x:Name="serverInfoTextPanel" Width="380" Margin="10,10,10,10">
                         <Border BorderThickness="1" BorderBrush="White">
                             <ScrollViewer Height="220">
@@ -68,7 +68,7 @@
                             </ScrollViewer>
                         </Border>
                     </StackPanel>
-                    <Button x:Name="submitBtn" Content="Submit" Width="380" FontSize="22" Margin="10,110,10,10" Click="SubmitBtn_Click"></Button>
+                    <Button x:Name="submitBtn" Content="Submit" Width="380" FontSize="22" Margin="10,110,10,10" Click="SubmitButtonClick"></Button>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

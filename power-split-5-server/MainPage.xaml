@@ -29,7 +29,7 @@
                     <StackPanel Orientation="Vertical" Margin="10,10,10,10" Height="100">
                         <StackPanel x:Name="portPanel" Orientation="Horizontal" Margin="10,0,10,0">
                             <TextBlock x:Name="portText" Text="Port:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,25,0"/>
-                            <TextBlock x:Name="port" Text="19860" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="port" Text="80" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
                         </StackPanel>
                         <StackPanel x:Name="connectionsPanel" Orientation="Horizontal" Margin="10,0,10,0">
                             <TextBlock x:Name="connectionsText" Text="Connections:" TextWrapping="Wrap" FontSize="18" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,20,0"/>
