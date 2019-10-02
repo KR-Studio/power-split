@@ -48,7 +48,7 @@
                             <CheckBox x:Name="checkBox3" Content="Multiply" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
                         </StackPanel>
                         <StackPanel x:Name="checkbox2Panel" Orientation="Horizontal" Margin="10,10,10,10">
-                            <CheckBox x:Name="checkBox4" Content="Division" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
+                            <CheckBox x:Name="checkBox4" Content="Divide" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
                             <CheckBox x:Name="checkBox5" Content="Sin" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
                             <CheckBox x:Name="checkBox6" Content="Cos" Margin="0,10,0,10" VerticalAlignment="Top" FontSize="18" Click="CheckBoxClick"></CheckBox>
                         </StackPanel>
