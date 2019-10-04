@@ -6,6 +6,7 @@
 #include "SocketOption.h"
 #include "SocketHandler.h"
 #include "Constants.h"
+#include "NetPacket.h"
 
 namespace PowerSplitNet
 {
@@ -25,6 +26,8 @@ namespace PowerSplitNet
 		NetResult SendAll(const void * dataSource, int numberOfBytes);
 		SocketHandler GetHandler();
 		IPVersion GetIPVersion();
+		NetResult Send(NetPacket & packet);
+		NetResult Receive(NetPacket& packet);
 	private:
 		NetResult SetSocketOption(SocketOption option, BOOL value);
 		IPVersion ipVersion = IPVersion::IPv4;

@@ -204,6 +204,42 @@ namespace PowerSplitNet
 		return ipVersion;
 	}
 
+	NetResult NetSocket::Send(NetPacket& packet)
+	{
+		uint32_t encodedPacketSize = htonl(packet.buffer.size());
+		NetResult result = SendAll(&encodedPacketSize, sizeof(uint32_t));
+		if (result != NetResult::Net_Success)
+			return NetResult::Net_GenericError;
+
+		result = SendAll(packet.buffer.data(), packet.buffer.size());
+		if (result != NetResult::Net_Success)
+			return NetResult::Net_GenericError;
+
+		return NetResult::Net_Success;
+	}
+
+	NetResult NetSocket::Receive(NetPacket& packet)
+	{
+		packet.Clear();
+
+		uint32_t encodedSize = 0;
+		NetResult result = ReceiveAll(&encodedSize, sizeof(uint32_t));
+		if (result != NetResult::Net_Success)
+			return NetResult::Net_GenericError;
+
+		uint32_t bufferSize = ntohl(encodedSize);
+
+		if (bufferSize > PowerSplitNet::MAX_PACKETSIZE)
+			return NetResult::Net_GenericError;
+
+		packet.buffer.resize(bufferSize);
+		result = ReceiveAll(&packet.buffer[0], bufferSize);
+		if (result != NetResult::Net_Success)
+			return NetResult::Net_GenericError;
+
+		return NetResult::Net_Success;
+	}
+
 	NetResult NetSocket::SetSocketOption(SocketOption option, BOOL value)
 	{
 		int result = 0;

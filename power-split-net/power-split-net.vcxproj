@@ -127,6 +127,8 @@
     <ClInclude Include="Including.h" />
     <ClInclude Include="IPEndpoint.h" />
     <ClInclude Include="IPVersion.h" />
+    <ClInclude Include="NetPacket.h" />
+    <ClInclude Include="NetPacketException.h" />
     <ClInclude Include="NetResult.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="NetSocket.h" />
@@ -135,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IPEndpoint.cpp" />
+    <ClCompile Include="NetPacket.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="NetSocket.cpp" />
   </ItemGroup>

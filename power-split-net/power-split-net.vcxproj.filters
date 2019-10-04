@@ -42,6 +42,12 @@
     <ClInclude Include="SocketHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NetPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetPacketException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Network.cpp">
@@ -51,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NetSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetPacket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
