@@ -58,6 +58,8 @@ NetSocket socketListener;
 NetResult ifConnected = NetResult::Net_NotYetImplemented;
 // Check operands
 int operandsActive = 0;
+// Check number of messages
+int numberOfMessage = 0;
 
 std::wstring s2ws(const std::string& dataStr)
 {
@@ -188,29 +190,6 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 		std::string dataStr = "WinSock API successfully initialized\r\n";
 		textBlockInfoOutput->Text += s2ps(dataStr);
 
-		/*IPEndpoint ip("www.google.com", 8080);
-		if (ip.GetIpVersion() == IPVersion::IPv4)
-		{
-			std::string dataStr = "Hostname: " + ip.GetHostname() + "\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-			dataStr = "IP: " + ip.GetIpStr() + "\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-			dataStr = "Port: " + std::to_string(ip.GetPort()) + "\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-			dataStr = "Bytes... ";
-			for (auto& digit : ip.GetIpBytes())
-			{
-				dataStr += std::to_string((int)digit) + " ";
-			}
-			dataStr += "\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-		}
-		else
-		{
-			std::string dataStr = "Error occurs when trying to get access to non-IPv4 address\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-		}*/
-
 		if (socketListener.Create() == NetResult::Net_Success)
 		{
 			std::string dataStr = "Socket successfully created\r\n";
@@ -232,7 +211,9 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 
 				uint32_t messageNumber, messageSize;
 				std::string messageData;
-				messageNumber = 1; messageSize = 14; messageData = "Hello, Server!";
+				messageData = "Hello, Server!";
+				messageNumber = ++numberOfMessage;
+				messageSize = messageData.size();
 				NetPacket packetTest;
 				packetTest << messageNumber << messageSize << messageData;
 
@@ -330,6 +311,7 @@ void PowerSplitClient::MainPage::CheckBoxClick(Platform::Object^ sender, Windows
 
 void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
+	// Check active connection with server
 	if (ifConnected == NetResult::Net_NotYetImplemented)
 	{
 		std::string dataStr = "Please first connect to server\r\n";
@@ -337,8 +319,6 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 	}
 	else
 	{
-		std::string buffer = "";
-
 		if (checkBoxesActive.size() == 0)
 		{
 			std::string dataStr = "Please choose any method from checkBoxes\r\n";
@@ -346,6 +326,7 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 		}
 		else
 		{
+			// Prepare varibles to sending
 			String^ operand1Pstr = operand1TextBox->Text;
 			std::string operand1Str = ps2s(operand1Pstr);
 			if (operand1Str == "") {
@@ -374,21 +355,32 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 				}
 			}
 
-			buffer += methodsStr;
-
+			// Prepare sending data
 			uint32_t messageNumber, messageSize;
 			std::string messageData;
-			messageNumber = operand1Int; messageSize = operand2Int; messageData = buffer;
-			NetPacket packetTest;
-			packetTest << messageNumber << messageSize << messageData;
+			messageNumber = ++numberOfMessage;
+			messageSize = (int)sizeof(messageData);
+			messageData = methodsStr;
 
+			//// for int dataType
+			//uint32_t operand1, operand2;
+			//operand1 = operand1Int; operand2 = operand2Int;
+
+			// for double dataType
+			std::string operand1, operand2;
+			operand1 = operand1Str; operand2 = operand2Str;
+
+			NetPacket packetToSend;
+			packetToSend << messageNumber << messageSize << operand1 << operand2 << messageData;
+
+			// Send the prepared packet with data
 			NetResult result = NetResult::Net_Success;
 			while (result == NetResult::Net_Success)
 			{
 				std::string dataStr = "Attempting to send set of data...\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
 
-				result = socketListener.Send(packetTest);
+				result = socketListener.Send(packetToSend);
 				if (result != NetResult::Net_Success)
 					break;
 
@@ -400,6 +392,7 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 			std::string dataStr = "Data has just been sent to the server\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
 
+			// Wait for response data from server
 			std::string resultStr;
 			NetPacket packetToReceive;
 			result = NetResult::Net_Success;
@@ -410,7 +403,7 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 				if (result != NetResult::Net_Success)
 					break;
 
-				std::string dataStr = "Data receive:\r\n";
+				std::string dataStr = "Data received:\r\n";
 				textBlockComputingOutput->Text += s2ps(dataStr);
 				try
 				{
@@ -421,53 +414,10 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 					std::string dataStr = exception.ToString() + "\r\n";
 					textBlockComputingOutput->Text += s2ps(dataStr);
 				}
-				dataStr = resultStr + "\r\n";
+				dataStr = resultStr;
 				textBlockComputingOutput->Text += s2ps(dataStr);
 				break;
 			}
-
-			//NetResult result1 = NetResult::Net_Success;
-			//while (result == NetResult::Net_Success)
-			//{
-			//	uint32_t bufferSize = bufferToReceive.size();
-			//	result1 = socketListener.ReceiveAll(&bufferSize, sizeof(uint32_t));
-			//	if (result1 != NetResult::Net_Success)
-			//		break;
-			//	else
-			//	{
-			//		bufferSize = ntohl(bufferSize); // network to host by long
-
-			//		if (bufferSize > PowerSplitNet::MAX_PACKETSIZE)
-			//			break;
-
-			//		bufferToReceive.resize(bufferSize);
-			//		result1 = socketListener.ReceiveAll(&bufferToReceive[0], bufferSize);
-			//		if (result1 != NetResult::Net_Success)
-			//			break;
-			//		else
-			//		{
-			//			//std::string dataStr = "Data received: ";
-			//			//dataStr += '[' + std::to_string(bufferSize) + ']' + ' ' + bufferToReceive + "\r\n";
-			//			//textBlockComputingOutput->Text += s2ps(dataStr);
-
-			//			//std::vector<std::string> dataWordsStr;
-			//			//std::istringstream ist(dataStr);
-			//			//std::string tmp;
-			//			//while (ist >> tmp)
-			//			//	dataWordsStr.emplace_back(tmp);
-
-			//			//dataStr = "Words: ";
-			//			//for (int i = 3; i < dataWordsStr.size(); ++i)
-			//			//	dataStr += dataWordsStr[i] + ' ';
-			//			//textBlockComputingOutput->Text += s2ps(dataStr);
-			//			//break;
-
-			//			std::string dataStr = bufferToReceive;
-			//			textBlockComputingOutput->Text += s2ps(dataStr);
-			//			break;
-			//		}
-			//	}
-			//}
 
 			dataStr = "Data has just been received from the server\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);

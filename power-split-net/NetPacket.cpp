@@ -22,6 +22,7 @@ namespace PowerSplitNet
 	{
 		data = htonl(data);
 		Append(&data, sizeof(uint32_t));
+
 		return *this;
 	}
 
@@ -33,6 +34,7 @@ namespace PowerSplitNet
 		data = *reinterpret_cast<uint32_t*>(&buffer[extractionOffset]);
 		data = ntohl(data);
 		extractionOffset += sizeof(uint32_t);
+
 		return *this;
 	}
 
@@ -41,7 +43,6 @@ namespace PowerSplitNet
 		*this << (uint32_t)data.size();
 		Append(data.data(), data.size());
 
-		std::cerr << "in op <<: " << data.data() << std::endl;
 		return *this;
 	}
 
@@ -58,6 +59,7 @@ namespace PowerSplitNet
 		data.resize(stringSize);
 		data.assign(&buffer[extractionOffset], stringSize);
 		extractionOffset += stringSize;
+
 		return *this;
 	}
 }
