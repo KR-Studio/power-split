@@ -230,33 +230,37 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 				std::string dataStr = "Succesfully connected to server!\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
 
-				std::string buffer = "Hello, Server!";
+				uint32_t messageNumber, messageSize;
+				std::string messageData;
+				messageNumber = 1; messageSize = 14; messageData = "Hello, Server!";
+				NetPacket packetTest;
+				packetTest << messageNumber << messageSize << messageData;
 
 				NetResult result = NetResult::Net_Success;
 				while (result == NetResult::Net_Success)
 				{
-					uint32_t bufferSize = buffer.size();
-					bufferSize = htonl(bufferSize); // host to network by long
-					result = socketListener.SendAll(&bufferSize, sizeof(uint32_t));
+					std::string dataStr = "Attempting to send set of data...\r\n";
+					textBlockInfoOutput->Text += s2ps(dataStr);
+
+					result = socketListener.Send(packetTest);
 					if (result != NetResult::Net_Success)
 						break;
-					else
-					{
-						result = socketListener.SendAll(buffer.data(), buffer.size());
-						if (result != NetResult::Net_Success) 
-							break;
-						else
-						{
-							std::string dataStr = "Attempting to send set of data...\r\n";
-							textBlockInfoOutput->Text += s2ps(dataStr);
-							break;
-						}
-					}
+
+					dataStr = "Data has been sent to server\r\n";
+					textBlockInfoOutput->Text += s2ps(dataStr);
+					break;
 				}
 			}
 			else
 			{
 				std::string dataStr = "Failed to connect to server!\r\n";
+				textBlockInfoOutput->Text += s2ps(dataStr);
+
+				socketListener.Close();
+
+				ifConnected = NetResult::Net_NotYetImplemented;
+
+				dataStr = "Socket successfully closed\r\n";
 				textBlockInfoOutput->Text += s2ps(dataStr);
 			}
 		}
@@ -264,10 +268,22 @@ void PowerSplitClient::MainPage::ConnectButtonClick(Platform::Object^ sender, Wi
 		{
 			std::string dataStr = "Socket failed to create\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
+
+			socketListener.Close();
+
+			ifConnected = NetResult::Net_NotYetImplemented;
+
+			dataStr = "Socket successfully closed\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
 		}
 	}
 	else {
 		std::string dataStr = "WSAStartup failed with error\r\n";
+		textBlockInfoOutput->Text += s2ps(dataStr);
+
+		Network::Shutdown();
+
+		dataStr = "WinSock API successfully closed\r\n";
 		textBlockInfoOutput->Text += s2ps(dataStr);
 	}
 }
@@ -335,7 +351,7 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 			if (operand1Str == "") {
 				operand1Str = "0";
 			}
-			//int operand1Int = ps2i(operand1Pstr);
+			int operand1Int = ps2i(operand1Pstr);
 			double operand1Double = ps2d(operand1Pstr);
 
 			String^ operand2Pstr = operand2TextBox->Text;
@@ -343,7 +359,7 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 			if (operand2Str == "") {
 				operand2Str = "0";
 			}
-			//int operand2Int = ps2i(operand2Pstr);
+			int operand2Int = ps2i(operand2Pstr);
 			double operand2Double = ps2d(operand2Pstr);
 
 			std::string methodsStr = "";
@@ -358,159 +374,103 @@ void PowerSplitClient::MainPage::SubmitButtonClick(Platform::Object^ sender, Win
 				}
 			}
 
-			buffer += operand1Str + " " + operand2Str + " " + methodsStr;
+			buffer += methodsStr;
+
+			uint32_t messageNumber, messageSize;
+			std::string messageData;
+			messageNumber = operand1Int; messageSize = operand2Int; messageData = buffer;
+			NetPacket packetTest;
+			packetTest << messageNumber << messageSize << messageData;
 
 			NetResult result = NetResult::Net_Success;
 			while (result == NetResult::Net_Success)
 			{
-				uint32_t bufferSize = buffer.size();
-				bufferSize = htonl(bufferSize); // host to network by long
-				result = socketListener.SendAll(&bufferSize, sizeof(uint32_t));
+				std::string dataStr = "Attempting to send set of data...\r\n";
+				textBlockInfoOutput->Text += s2ps(dataStr);
+
+				result = socketListener.Send(packetTest);
 				if (result != NetResult::Net_Success)
 					break;
-				else
-				{
-					result = socketListener.SendAll(buffer.data(), buffer.size());
-					if (result != NetResult::Net_Success)
-						break;
-					else
-					{
-						std::string dataStr = "Attempting to send set of data...\r\n";
-						textBlockInfoOutput->Text += s2ps(dataStr);
-						break;
-					}
-				}
+
+				dataStr = "Data has been sent to server\r\n";
+				textBlockInfoOutput->Text += s2ps(dataStr);
+				break;
 			}
 
 			std::string dataStr = "Data has just been sent to the server\r\n";
 			textBlockInfoOutput->Text += s2ps(dataStr);
 
-			dataStr = "Data has just been received from the server\r\n";
-			textBlockInfoOutput->Text += s2ps(dataStr);
-
-			for each (std::string checkBoxActive in checkBoxesActive)
-			{
-				if (checkBoxActive == "Add")
-				{
-					std::string dataStr = "Result of Add: ";
-					dataStr += std::to_string(add(operand1Double, operand2Double)) + "\r\n";
-					textBlockComputingOutput->Text += s2ps(dataStr);
-				}
-				else
-				{
-					if (checkBoxActive == "Subtract")
-					{
-						std::string dataStr = "Result of Subtract: ";
-						dataStr += std::to_string(subtract(operand1Double, operand2Double)) + "\r\n";
-						textBlockComputingOutput->Text += s2ps(dataStr);
-					}
-					else 
-					{
-						if (checkBoxActive == "Multiply")
-						{
-							std::string dataStr = "Result of Multiply: ";
-							dataStr += std::to_string(multiply(operand1Double, operand2Double)) + "\r\n";
-							textBlockComputingOutput->Text += s2ps(dataStr);
-						}
-						else
-						{
-							if (checkBoxActive == "Divide")
-							{
-								std::string dataStr = "Result of Divide: ";
-								dataStr += std::to_string(divide(operand1Double, operand2Double)) + "\r\n";
-								textBlockComputingOutput->Text += s2ps(dataStr);
-							}
-							else
-							{
-								if (checkBoxActive == "Sin")
-								{
-									std::string dataStr = "Result of Sin (operand1): ";
-									dataStr += std::to_string(sine(operand1Double)) + "\r\n";
-									dataStr += "Result of Sin (operand2): ";
-									dataStr += std::to_string(sine(operand2Double)) + "\r\n";
-									textBlockComputingOutput->Text += s2ps(dataStr);
-								}
-								else
-								{
-									if (checkBoxActive == "Cos")
-									{
-										std::string dataStr = "Result of Cos (operand1): ";
-										dataStr += std::to_string(cosine(operand1Double)) + "\r\n";
-										dataStr += "Result of Cos (operand2): ";
-										dataStr += std::to_string(cosine(operand2Double)) + "\r\n";
-										textBlockComputingOutput->Text += s2ps(dataStr);
-									}
-									else
-									{
-										if (checkBoxActive == "Tan")
-										{
-											std::string dataStr = "Result of Tan (operand1): ";
-											dataStr += std::to_string(tang(operand1Double)) + "\r\n";
-											dataStr += "Result of Tan (operand2): ";
-											dataStr += std::to_string(tang(operand2Double)) + "\r\n";
-											textBlockComputingOutput->Text += s2ps(dataStr);
-										}
-										else
-										{
-											if (checkBoxActive == "Cotan")
-											{
-												std::string dataStr = "Result of Cotan (operand1): ";
-												dataStr += std::to_string(cotang(operand1Double)) + "\r\n";
-												dataStr += "Result of Cotan (operand2): ";
-												dataStr += std::to_string(cotang(operand2Double)) + "\r\n";
-												textBlockComputingOutput->Text += s2ps(dataStr);
-											}
-											else
-											{
-												std::string dataStr = "Error result!";
-												textBlockComputingOutput->Text += s2ps(dataStr);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			NetResult result1 = NetResult::Net_Success;
+			std::string resultStr;
+			NetPacket packetToReceive;
+			result = NetResult::Net_Success;
+			int numberOfMessages = 0;
 			while (result == NetResult::Net_Success)
 			{
-				break; uint32_t bufferSize = buffer.size();
-				result1 = socketListener.ReceiveAll(&bufferSize, sizeof(uint32_t));
-				if (result1 != NetResult::Net_Success)
+				result = socketListener.Receive(packetToReceive);
+				if (result != NetResult::Net_Success)
 					break;
-				else
+
+				std::string dataStr = "Data receive:\r\n";
+				textBlockComputingOutput->Text += s2ps(dataStr);
+				try
 				{
-					bufferSize = ntohl(bufferSize); // network to host by long
-
-					if (bufferSize > PowerSplitNet::MAX_PACKETSIZE)
-						break;
-
-					buffer.resize(bufferSize);
-					result1 = socketListener.ReceiveAll(&buffer[0], bufferSize);
-					if (result1 != NetResult::Net_Success)
-						break;
-					else
-					{
-						std::string dataStr = "Data received: ";
-						dataStr += '[' + std::to_string(bufferSize) + ']' + ' ' + buffer;
-
-						std::vector<std::string> dataWordsStr;
-						std::istringstream ist(dataStr);
-						std::string tmp;
-						while (ist >> tmp)
-							dataWordsStr.emplace_back(tmp);
-
-						//std::cout << "Words:" << std::endl;
-						//for (int i = 3; i < dataWordsStr.size(); ++i)
-						//	std::cout << dataWordsStr[i] << ' ';
-
-						//break;
-					}
+					packetToReceive >> resultStr;
 				}
+				catch (NetPacketException& exception)
+				{
+					std::string dataStr = exception.ToString() + "\r\n";
+					textBlockComputingOutput->Text += s2ps(dataStr);
+				}
+				dataStr = resultStr + "\r\n";
+				textBlockComputingOutput->Text += s2ps(dataStr);
+				break;
 			}
+
+			//NetResult result1 = NetResult::Net_Success;
+			//while (result == NetResult::Net_Success)
+			//{
+			//	uint32_t bufferSize = bufferToReceive.size();
+			//	result1 = socketListener.ReceiveAll(&bufferSize, sizeof(uint32_t));
+			//	if (result1 != NetResult::Net_Success)
+			//		break;
+			//	else
+			//	{
+			//		bufferSize = ntohl(bufferSize); // network to host by long
+
+			//		if (bufferSize > PowerSplitNet::MAX_PACKETSIZE)
+			//			break;
+
+			//		bufferToReceive.resize(bufferSize);
+			//		result1 = socketListener.ReceiveAll(&bufferToReceive[0], bufferSize);
+			//		if (result1 != NetResult::Net_Success)
+			//			break;
+			//		else
+			//		{
+			//			//std::string dataStr = "Data received: ";
+			//			//dataStr += '[' + std::to_string(bufferSize) + ']' + ' ' + bufferToReceive + "\r\n";
+			//			//textBlockComputingOutput->Text += s2ps(dataStr);
+
+			//			//std::vector<std::string> dataWordsStr;
+			//			//std::istringstream ist(dataStr);
+			//			//std::string tmp;
+			//			//while (ist >> tmp)
+			//			//	dataWordsStr.emplace_back(tmp);
+
+			//			//dataStr = "Words: ";
+			//			//for (int i = 3; i < dataWordsStr.size(); ++i)
+			//			//	dataStr += dataWordsStr[i] + ' ';
+			//			//textBlockComputingOutput->Text += s2ps(dataStr);
+			//			//break;
+
+			//			std::string dataStr = bufferToReceive;
+			//			textBlockComputingOutput->Text += s2ps(dataStr);
+			//			break;
+			//		}
+			//	}
+			//}
+
+			dataStr = "Data has just been received from the server\r\n";
+			textBlockInfoOutput->Text += s2ps(dataStr);
 		}
 	}
 }

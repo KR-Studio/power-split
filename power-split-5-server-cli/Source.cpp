@@ -99,132 +99,137 @@ int main()
 					std::string dataStr = "New connection accepted";
 					std::cout << dataStr << std::endl;
 
-					std::string buffer = "";
+					//std::string buffer = "";
+					uint32_t operand1(0), operand2(0);
+					std::string methodsStr;
+					NetPacket packet;
 					NetResult result = NetResult::Net_Success;
 					int numberOfMessages = 0;
 					while (result == NetResult::Net_Success)
 					{
-						uint32_t bufferSize = buffer.size();
-						result = newConnection.ReceiveAll(&bufferSize, sizeof(uint32_t));
+						result = newConnection.Receive(packet);
 						if (result != NetResult::Net_Success)
 							break;
 						else
 						{
-							bufferSize = ntohl(bufferSize); // network to host by long
+							numberOfMessages++;
 
-							if (bufferSize > PowerSplitNet::MAX_PACKETSIZE)
-								break;
-
-							buffer.resize(bufferSize);
-							result = newConnection.ReceiveAll(&buffer[0], bufferSize);
-							if (result != NetResult::Net_Success)
-								break;
-							else
+							std::cout << "Data received: ";
+							try
 							{
-								numberOfMessages++;
+								packet >> operand1 >> operand2 >> methodsStr;
+							}
+							catch (NetPacketException & exception)
+							{
+								std::cout << exception.CStr() << std::endl;
+							}
+							std::string dataStr = std::to_string(operand1) + ' ' + std::to_string(operand2) + ' ' + methodsStr;
+							std::cout << dataStr << std::endl;
 
-								std::cout << "Data received: ";
-								std::string dataStr = '[' + std::to_string(bufferSize) + ']' + ' ' + buffer;
-								std::cout << dataStr << std::endl;
+							std::vector<std::string> dataWordsStr;
+							std::istringstream ist(methodsStr);
+							std::string tmp;
+							while (ist >> tmp)
+								dataWordsStr.emplace_back(tmp);
 
-								std::vector<std::string> dataWordsStr;
-								std::istringstream ist(dataStr);
-								std::string tmp;
-								while (ist >> tmp)
-									dataWordsStr.emplace_back(tmp);
+							//std::cout << "Words:" << std::endl;
+							//for (int i = 3; i < dataWordsStr.size(); ++i)
+							//	std::cout << dataWordsStr[i] << ' ';
 
-								//std::cout << "Words:" << std::endl;
-								//for (int i = 3; i < dataWordsStr.size(); ++i)
-								//	std::cout << dataWordsStr[i] << ' ';
-								
-								//break;
-								if (numberOfMessages > 1)
+							std::string bufferToSend = "Data from Server:\r\n";
+							std::cout << "buffer: " << bufferToSend.size() << std::endl;
+							if (numberOfMessages > 1)
+							{
+								double operand1Double = operand1;
+								double operand2Double = operand2;
+
+								for (int i = 0; i < dataWordsStr.size(); ++i)
 								{
-									double operand1Double = stod(dataWordsStr[1]);
-									double operand2Double = stod(dataWordsStr[2]);
-
-									for (int i = 3; i < dataWordsStr.size(); ++i)
+									std::string checkBoxActive = dataWordsStr[i];
+									if (checkBoxActive == "Add")
 									{
-										std::string checkBoxActive = dataWordsStr[i];
-										if (checkBoxActive == "Add")
+										std::string dataStr = "Result of Add: ";
+										dataStr += std::to_string(add(operand1Double, operand2Double));
+										bufferToSend += dataStr + '.';
+										//bufferToSend.resize(sizeof(dataStr));
+										//memcpy(&bufferToSend[0], &dataStr[0], sizeof(dataStr));
+										std::cout << "1 ";
+										std::cout << bufferToSend << std::endl;
+										std::cout << "buffer: " << bufferToSend.size() << std::endl;
+										std::cout << dataStr << std::endl;
+									}
+									else
+									{
+										if (checkBoxActive == "Subtract")
 										{
-											std::string dataStr = "Result of Add: ";
-											dataStr += std::to_string(add(operand1Double, operand2Double));
+											std::string dataStr = "Result of Subtract: ";
+											dataStr += std::to_string(subtract(operand1Double, operand2Double));
 											std::cout << dataStr << std::endl;
 										}
 										else
 										{
-											if (checkBoxActive == "Subtract")
+											if (checkBoxActive == "Multiply")
 											{
-												std::string dataStr = "Result of Subtract: ";
-												dataStr += std::to_string(subtract(operand1Double, operand2Double));
+												std::string dataStr = "Result of Multiply: ";
+												dataStr += std::to_string(multiply(operand1Double, operand2Double));
 												std::cout << dataStr << std::endl;
 											}
 											else
 											{
-												if (checkBoxActive == "Multiply")
+												if (checkBoxActive == "Divide")
 												{
-													std::string dataStr = "Result of Multiply: ";
-													dataStr += std::to_string(multiply(operand1Double, operand2Double));
+													std::string dataStr = "Result of Divide: ";
+													dataStr += std::to_string(divide(operand1Double, operand2Double));
 													std::cout << dataStr << std::endl;
 												}
 												else
 												{
-													if (checkBoxActive == "Divide")
+													if (checkBoxActive == "Sin")
 													{
-														std::string dataStr = "Result of Divide: ";
-														dataStr += std::to_string(divide(operand1Double, operand2Double));
+														std::string dataStr = "Result of Sin (operand1): ";
+														dataStr += std::to_string(sine(operand1Double));
+														std::cout << dataStr << std::endl;
+														dataStr = "Result of Sin (operand2): ";
+														dataStr += std::to_string(sine(operand2Double));
 														std::cout << dataStr << std::endl;
 													}
 													else
 													{
-														if (checkBoxActive == "Sin")
+														if (checkBoxActive == "Cos")
 														{
-															std::string dataStr = "Result of Sin (operand1): ";
-															dataStr += std::to_string(sine(operand1Double));
+															std::string dataStr = "Result of Cos (operand1): ";
+															dataStr += std::to_string(cosine(operand1Double));
 															std::cout << dataStr << std::endl;
-															dataStr = "Result of Sin (operand2): ";
-															dataStr += std::to_string(sine(operand2Double));
+															dataStr = "Result of Cos (operand2): ";
+															dataStr += std::to_string(cosine(operand2Double));
 															std::cout << dataStr << std::endl;
 														}
 														else
 														{
-															if (checkBoxActive == "Cos")
+															if (checkBoxActive == "Tan")
 															{
-																std::string dataStr = "Result of Cos (operand1): ";
-																dataStr += std::to_string(cosine(operand1Double));
+																std::string dataStr = "Result of Tan (operand1): ";
+																dataStr += std::to_string(tang(operand1Double));
 																std::cout << dataStr << std::endl;
-																dataStr = "Result of Cos (operand2): ";
-																dataStr += std::to_string(cosine(operand2Double));
+																dataStr = "Result of Tan (operand2): ";
+																dataStr += std::to_string(tang(operand2Double));
 																std::cout << dataStr << std::endl;
 															}
 															else
 															{
-																if (checkBoxActive == "Tan")
+																if (checkBoxActive == "Cotan")
 																{
-																	std::string dataStr = "Result of Tan (operand1): ";
-																	dataStr += std::to_string(tang(operand1Double));
+																	std::string dataStr = "Result of Cotan (operand1): ";
+																	dataStr += std::to_string(cotang(operand1Double));
 																	std::cout << dataStr << std::endl;
-																	dataStr = "Result of Tan (operand2): ";
-																	dataStr += std::to_string(tang(operand2Double));
+																	dataStr = "Result of Cotan (operand2): ";
+																	dataStr += std::to_string(cotang(operand2Double));
 																	std::cout << dataStr << std::endl;
 																}
 																else
 																{
-																	if (checkBoxActive == "Cotan")
-																	{
-																		std::string dataStr = "Result of Cotan (operand1): ";
-																		dataStr += std::to_string(cotang(operand1Double));
-																		std::cout << dataStr << std::endl;
-																		dataStr = "Result of Cotan (operand2): ";
-																		dataStr += std::to_string(cotang(operand2Double));
-																		std::cout << dataStr << std::endl;
-																	}
-																	else
-																	{
-																		std::string dataStr = "Error result!";
-																		std::cout << dataStr << std::endl;
-																	}
+																	std::string dataStr = "Error result!";
+																	std::cout << dataStr << std::endl;
 																}
 															}
 														}
@@ -234,32 +239,72 @@ int main()
 										}
 									}
 								}
-
-								std::cout << "Result successfully sent to client" << std::endl;
-
-
-								NetResult result = NetResult::Net_Success;
-								while (result == NetResult::Net_Success)
-								{
-									break; uint32_t bufferSize = buffer.size();
-									bufferSize = htonl(bufferSize); // host to network by long
-									result = socket.SendAll(&bufferSize, sizeof(uint32_t));
-									if (result != NetResult::Net_Success)
-										break;
-									else
-									{
-										result = socket.SendAll(buffer.data(), buffer.size());
-										if (result != NetResult::Net_Success)
-											break;
-										else
-										{
-											std::string dataStr = "Attempting to send set of data...";
-												std::cout << dataStr << std::endl;
-											break;
-										}
-									}
-								}
 							}
+
+							std::cout << "2 ";
+							std::cout << bufferToSend << std::endl;
+							std::cout << "buffer: " << bufferToSend.size() << std::endl;
+
+							std::string messageData;
+							messageData = bufferToSend;
+							NetPacket packetToSend;
+							packetToSend << messageData;
+
+							NetResult result = NetResult::Net_Success;
+							while (result == NetResult::Net_Success)
+							{
+								std::string dataStr = "Attempting to send set of data...";
+								std::cout << dataStr << std::endl;
+
+								result = newConnection.Send(packetToSend);
+								if (result != NetResult::Net_Success)
+									break;
+
+								dataStr = "Data has been sent to client";
+								std::cout << dataStr << std::endl;
+								break;
+							}
+
+							//NetResult resultSend = NetResult::Net_Success;
+							//while (resultSend == NetResult::Net_Success)
+							//{
+							//	uint32_t bufferSize = bufferToSend.size();
+							//	std::cout << "uint ";
+							//	std::cout << bufferToSend << std::endl;
+							//	std::cout << "buffer: " << bufferSize << std::endl;
+							//	bufferSize = htonl(bufferSize); // host to network by long
+							//	std::cout << "htonl ";
+							//	std::cout << bufferToSend << std::endl;
+							//	std::cout << "buffer: " << bufferSize << std::endl;
+							//	resultSend = newConnection.SendAll(&bufferSize, sizeof(uint32_t));
+							//	if (resultSend != NetResult::Net_Success)
+							//		break;
+							//	else
+							//	{
+							//		std::cout << "3 ";
+							//		std::cout << bufferToSend << std::endl;
+							//		std::cout << "buffer: " << bufferToSend.size() << std::endl;
+							//		std::cout << "4 ";
+							//		std::cout << bufferToSend.data() << std::endl;
+							//		std::cout << "buffer: " << bufferToSend.size() << std::endl;
+							//		resultSend = newConnection.SendAll(bufferToSend.data(), bufferToSend.size());
+							//		if (resultSend != NetResult::Net_Success)
+							//		{
+							//			std::string dataStr = "Failed to send set of data...";
+							//			std::cout << dataStr << std::endl;
+							//			break;
+							//		}
+							//		else
+							//		{
+							//			std::string dataStr = "Attempting to send set of data...";
+							//			std::cout << dataStr << std::endl;
+
+							//			dataStr = "Result successfully sent to client";
+							//			std::cout << dataStr << std::endl;
+							//			break;
+							//		}
+							//	}
+							//}
 						}
 					}
 
