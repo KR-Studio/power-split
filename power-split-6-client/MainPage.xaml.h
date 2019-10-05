@@ -18,12 +18,12 @@ namespace PowerSplitClient
 		MainPage();
 
 	private:
-		void ConnectBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void DisconenctBtn_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask1_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask2_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask3_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void StartTask4_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-		void Page_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void ConnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void DisconnectButtonClick(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void StartTask1Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void StartTask2Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void StartTask3Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void StartTask4Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }

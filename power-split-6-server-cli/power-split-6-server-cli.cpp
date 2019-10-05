@@ -1,11 +1,26 @@
 // power-split-6-server-cli.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#undef UNICODE
 
+#define WIN32_LEAN_AND_MEAN
+
+#include <string>
 #include <iostream>
+#include <sstream>
+#include <math.h>  
+#include <cmath>
+#include <power-split-net/Including.h>
+#include <list>
+#include <iterator>
+
+using namespace PowerSplitNet;
 
 int main()
 {
     std::cout << "Hello World!\n";
+
+	system("pause");
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
