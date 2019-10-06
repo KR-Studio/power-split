@@ -41,11 +41,13 @@ int main()
 					std::string outputDataStr = "New connection accepted";
 					std::cout << outputDataStr << std::endl;
 
-					uint32_t messageNumberReceived, messageSizeReceived;
+					uint32_t messageNumberReceived, messageDataSizeReceived;
+					uint32_t rectangleHeight, rectangleWidth;
 					std::string messageDataReceived;
 					NetPacket packetReceived;
 
-					uint32_t messageNumberToSend, messageSizeToSend;
+					uint32_t messageNumberToSend, messageDataSizeToSend;
+					uint32_t rectanglesSquare = 0, rectangle1Square = 0, rectangle2Square = 0, rectangle3Square = 0, rectangle4Square = 0, rectangleSquare = 0;
 					std::string messageDataToSend;
 					NetPacket packetToSend;
 					
@@ -60,7 +62,7 @@ int main()
 							std::cout << "Data received: ";
 							try
 							{
-								packetReceived >> messageNumberReceived >> messageSizeReceived;
+								packetReceived >> messageNumberReceived >> messageDataSizeReceived >> messageDataReceived;
 							}
 							catch (NetPacketException& exception)
 							{
@@ -68,33 +70,124 @@ int main()
 							}
 
 							if (messageNumberReceived <= 1) {
-								try
-								{
-									packetReceived >> messageDataReceived;
-								}
-								catch (NetPacketException& exception)
-								{
-									std::cout << exception.CStr() << std::endl;
-								}
 
-								std::string outputDataStr = messageDataReceived;
+								std::string outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + messageDataReceived;
 								std::cout << outputDataStr << std::endl;
 
 								messageDataToSend = "Hello, Client!";
 								messageNumberToSend = ++numberOfMessage;
-								messageSizeToSend = messageDataToSend.size();
-								packetToSend << messageNumberToSend << messageSizeToSend << messageDataToSend;
-
+								messageDataSizeToSend = messageDataToSend.size();
+								packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend;
 							}
 							else {
 								try
 								{
-									packetReceived >> messageDataReceived;
+									packetReceived >> rectangleHeight >> rectangleWidth;
 								}
 								catch (NetPacketException& exception)
 								{
 									std::cout << exception.CStr() << std::endl;
 								}
+
+								std::string outputDataStr = std::to_string(messageNumberReceived) + " " + std::to_string(messageDataSizeReceived) + " " + std::to_string(rectangleHeight) + " " + std::to_string(rectangleWidth) + " " + messageDataReceived;
+								std::cout << outputDataStr << std::endl;
+
+								if (messageDataReceived == "Brown")
+								{
+									if (rectangle1Square == 0)
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
+										rectangle1Square = rectangleHeight * rectangleWidth;
+										rectangleSquare = rectangle1Square;
+										rectanglesSquare += rectangle1Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle1Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+									else
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle already sized";
+										rectangleSquare = rectangle1Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle1Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+								}
+								else if (messageDataReceived == "Black")
+								{
+									if (rectangle2Square == 0)
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
+										rectangle2Square = rectangleHeight * rectangleWidth;
+										rectangleSquare = rectangle2Square;
+										rectanglesSquare += rectangle2Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle2Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+									else
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle already sized";
+										rectangleSquare = rectangle2Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle2Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+								}
+								else if (messageDataReceived == "Blue")
+								{
+									if (rectangle3Square == 0)
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
+										rectangle3Square = rectangleHeight * rectangleWidth;
+										rectangleSquare = rectangle3Square;
+										rectanglesSquare += rectangle3Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle3Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+									else
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle already sized";
+										rectangleSquare = rectangle3Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle3Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+								}
+								else if (messageDataReceived == "Green")
+								{
+									if (rectangle4Square == 0)
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
+										rectangle4Square = rectangleHeight * rectangleWidth;
+										rectangleSquare = rectangle4Square;
+										rectanglesSquare += rectangle4Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle4Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+									else
+									{
+										messageDataToSend = messageDataReceived + " " + "Rectangle already sized";
+										rectangleSquare = rectangle4Square;
+
+										std::string outputDataStr = messageDataToSend + " - " + std::to_string(rectangle4Square) + " px";
+										std::cout << outputDataStr << std::endl;
+									}
+								}
+								else
+								{
+									messageDataToSend = "Undefined rectangle";
+									rectangleSquare = 0;
+
+									std::string outputDataStr = messageDataToSend;
+									std::cout << outputDataStr << std::endl;
+								}
+
+								messageNumberToSend = ++numberOfMessage;
+								messageDataSizeToSend = messageDataToSend.size();
+								packetToSend << messageNumberToSend << messageDataSizeToSend << messageDataToSend << rectangleSquare << rectanglesSquare ;
 							}
 
 							NetResult resultSent = NetResult::Net_Success;
@@ -107,6 +200,7 @@ int main()
 								if (resultSent != NetResult::Net_Success)
 									break;
 
+								packetToSend.Clear();
 								outputDataStr = "Data has been sent to client";
 								std::cout << outputDataStr << std::endl;
 								break;
