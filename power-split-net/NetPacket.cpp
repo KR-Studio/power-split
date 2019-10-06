@@ -53,7 +53,7 @@ namespace PowerSplitNet
 		uint32_t stringSize = 0;
 		*this >> stringSize;
 
-		if (extractionOffset + stringSize > buffer.size())
+		if (extractionOffset + (uint32_t)stringSize > buffer.size())
 			throw NetPacketException("[NetPacket::operator>>(std::string&)] - Packet size ecxeeded max packet size.");
 
 		data.resize(stringSize);
