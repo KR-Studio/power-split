@@ -12,11 +12,41 @@
 #include <power-split-net/Including.h>
 #include <list>
 #include <iterator>
+#include <regex>
+#include <future>
 
 using namespace PowerSplitNet;
 
+//std::vector<std::thread> threads;
+std::vector<std::thread> threads2;
+std::mutex mtx;
 // Check number of messages
 int numberOfMessage = 0;
+// Save rectangles square data
+uint32_t rectangle1Square = 0, rectangle2Square = 0, rectangle3Square = 0, rectangle4Square = 0;
+uint32_t rectanglesSquare = 0;
+
+void thread_rect_square(std::string color, uint32_t height, uint32_t width) {
+	std::lock_guard<std::mutex> guard(mtx);
+	int squareNum = width * height;
+	if (color == "Brown")
+	{
+		rectangle1Square = squareNum;
+	}
+	else if (color == "Black")
+	{
+		rectangle2Square = squareNum;
+	}
+	else if (color == "Blue")
+	{
+		rectangle3Square = squareNum;
+	}
+	else if (color == "Green")
+	{
+		rectangle4Square = squareNum;
+	}
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+}
 
 int main()
 {
@@ -47,9 +77,11 @@ int main()
 					NetPacket packetReceived;
 
 					uint32_t messageNumberToSend, messageDataSizeToSend;
-					uint32_t rectanglesSquare = 0, rectangle1Square = 0, rectangle2Square = 0, rectangle3Square = 0, rectangle4Square = 0, rectangleSquare = 0;
+					uint32_t rectangleSquare = 0;
 					std::string messageDataToSend;
 					NetPacket packetToSend;
+
+					std::vector<std::thread> threads;
 					
 					NetResult resultReceived = NetResult::Net_Success;
 					while (resultReceived == NetResult::Net_Success)
@@ -97,7 +129,12 @@ int main()
 									if (rectangle1Square == 0)
 									{
 										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
-										rectangle1Square = rectangleHeight * rectangleWidth;
+										std::thread thr(thread_rect_square, messageDataReceived, rectangleHeight, rectangleWidth);
+										threads.emplace_back(std::move(thr));
+
+										for (auto& thread : threads) {
+											thread.join();
+										}
 										rectangleSquare = rectangle1Square;
 										rectanglesSquare += rectangle1Square;
 
@@ -118,7 +155,12 @@ int main()
 									if (rectangle2Square == 0)
 									{
 										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
-										rectangle2Square = rectangleHeight * rectangleWidth;
+										std::thread thr(thread_rect_square, messageDataReceived, rectangleHeight, rectangleWidth);
+										threads.emplace_back(std::move(thr));
+
+										for (auto& thread : threads) {
+											thread.join();
+										}
 										rectangleSquare = rectangle2Square;
 										rectanglesSquare += rectangle2Square;
 
@@ -139,7 +181,12 @@ int main()
 									if (rectangle3Square == 0)
 									{
 										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
-										rectangle3Square = rectangleHeight * rectangleWidth;
+										std::thread thr(thread_rect_square, messageDataReceived, rectangleHeight, rectangleWidth);
+										threads.emplace_back(std::move(thr));
+
+										for (auto& thread : threads) {
+											thread.join();
+										}
 										rectangleSquare = rectangle3Square;
 										rectanglesSquare += rectangle3Square;
 
@@ -160,7 +207,12 @@ int main()
 									if (rectangle4Square == 0)
 									{
 										messageDataToSend = messageDataReceived + " " + "Rectangle sized";
-										rectangle4Square = rectangleHeight * rectangleWidth;
+										std::thread thr(thread_rect_square, messageDataReceived, rectangleHeight, rectangleWidth);
+										threads.emplace_back(std::move(thr));
+
+										for (auto& thread : threads) {
+											thread.join();
+										}
 										rectangleSquare = rectangle4Square;
 										rectanglesSquare += rectangle4Square;
 
@@ -201,6 +253,7 @@ int main()
 									break;
 
 								packetToSend.Clear();
+								threads.clear();
 								outputDataStr = "Data has been sent to client";
 								std::cout << outputDataStr << std::endl;
 								break;
