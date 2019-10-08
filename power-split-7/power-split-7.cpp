@@ -55,6 +55,11 @@ public:
 	{
 		return receive(_average);
 	}
+
+	int sum()
+	{
+		return receive(_sum);
+	}
 protected:
 	void run()
 	{
@@ -68,12 +73,13 @@ protected:
 		int n;
 		while ((n = receive(_source)) != _sentinel)
 		{
-			sum += pow(n, 2);
+			sum += n;
 			++count;
 		}
 
 		// Write the average to the message buffer.
-		send(_average, sum / count);
+		//send(_average, sum / count);
+		send(_sum, sum);
 
 		// Set the agent to the finished state.
 		done();
@@ -85,6 +91,8 @@ private:
 	int _sentinel;
 	// Holds the average of all received values.
 	single_assignment<int> _average;
+	// Holds the sum of all received values.
+	single_assignment<int> _sum;
 };
 
 int wmain()
@@ -108,5 +116,8 @@ int wmain()
 	agent::wait(&consumer);
 
 	// Print the average.
-	wcout << L"The average is " << consumer.average() << L'.' << endl;
+	//wcout << L"The average is " << consumer.average() << L'.' << endl;
+
+	// Print the sum.
+	wcout << L"The sum is " << consumer.sum() << L'.' << endl;
 }
