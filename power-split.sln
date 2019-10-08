@@ -35,6 +35,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-1", "power-spli
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-2", "power-split-2\power-split-2.vcxproj", "{D491C05C-356F-4D9A-8ED7-8177BF0AE054}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "power-split-7", "power-split-7\power-split-7.vcxproj", "{C989631E-1DC8-4FA7-B512-9D1E02E35C61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -251,6 +253,18 @@ Global
 		{D491C05C-356F-4D9A-8ED7-8177BF0AE054}.Release|x86.ActiveCfg = Release|Win32
 		{D491C05C-356F-4D9A-8ED7-8177BF0AE054}.Release|x86.Build.0 = Release|Win32
 		{D491C05C-356F-4D9A-8ED7-8177BF0AE054}.Release|x86.Deploy.0 = Release|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Debug|ARM.ActiveCfg = Debug|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Debug|x64.ActiveCfg = Debug|x64
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Debug|x64.Build.0 = Debug|x64
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Debug|x86.ActiveCfg = Debug|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Debug|x86.Build.0 = Debug|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Release|ARM.ActiveCfg = Release|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Release|ARM64.ActiveCfg = Release|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Release|x64.ActiveCfg = Release|x64
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Release|x64.Build.0 = Release|x64
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Release|x86.ActiveCfg = Release|Win32
+		{C989631E-1DC8-4FA7-B512-9D1E02E35C61}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
