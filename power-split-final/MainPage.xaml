@@ -37,6 +37,10 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                            <TextBlock HorizontalAlignment="Left" Text="The number of threads:" FontSize="22" Style="{ThemeResource BaseTextBlockStyle}" Width="300"/>
+                            <TextBox x:Name="textBoxThreads" Text="1" TextWrapping="Wrap" FontSize="22" Width="250"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                             <Button x:Name="calculateBtn" Content="Calculate" Width="250" FontSize="22" Margin="300,0,0,0" Click="CalculateButtonClicked"/>
                         </StackPanel>
                     </StackPanel>
@@ -44,7 +48,7 @@
                 <StackPanel Width="400">
                     <Border BorderThickness="1" BorderBrush="White">
                         <StackPanel Orientation="Vertical" Margin="10,10,10,10">
-                            <ScrollViewer Height="320">
+                            <ScrollViewer Height="375">
                                 <TextBlock x:Name="textBlockOutput" Text="Area for computed results" TextWrapping="Wrap" FontSize="20" Style="{ThemeResource BaseTextBlockStyle}" Margin="0,0,0,0"/>
                             </ScrollViewer>
                         </StackPanel>
