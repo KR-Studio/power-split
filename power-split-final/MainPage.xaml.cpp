@@ -89,6 +89,14 @@ String^ i2ps(const int& dataInt)
 }
 
 
+void testDebug(std::string dataStr)
+{
+	std::wstring debugWstr = s2ws(dataStr);
+	LPCWSTR finalDebugStr = debugWstr.c_str();
+	OutputDebugString(finalDebugStr);
+}
+
+
 MainPage::MainPage()
 {
 	InitializeComponent();
@@ -99,6 +107,8 @@ MainPage::MainPage()
 std::vector<std::thread> threads;
 // results
 std::vector<double> results;
+// intervals
+std::map<double, double> intervals;
 
 
 // Define type for f(x)
@@ -147,56 +157,76 @@ double rectangleMethod(pointFunction f, double a, double b, int n)
 }
 
 
-void calculateIntegral(double leftLimitDouble, double rightLimitDouble, double epsDouble, std::string method)
+void calculateIntegral(std::vector<double> &leftLimits, std::vector<double> &rightLimits, double epsDouble, std::string method)
 {
 	double yFinal = 0, yIntermediate = 0;
 	int steps = 1; // initial number of steps
 
-	if (method == "Simpson's rule")
+	for (std::size_t i = 0; i < leftLimits.size(); ++i)
 	{
-		yFinal = simpsonMethod(FunctionV3, leftLimitDouble, rightLimitDouble, steps); // first approximation for integral
+		double leftLimit = leftLimits[i];
+		double rightLimit = rightLimits[i];
 
-		do {
-			yIntermediate = yFinal;     // next approximation
-			steps = 2 * steps;  // double the number of steps
-						// i.e halving the step value
-			yFinal = simpsonMethod(FunctionV3, leftLimitDouble, rightLimitDouble, steps);
-		} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
+		if (method == "Simpson's rule")
+		{
+			yFinal = simpsonMethod(FunctionV3, leftLimit, rightLimit, steps); // first approximation for integral
 
-		std::string dbgStr = std::to_string(yFinal) + "\r\n";
-		std::wstring dbgWstr = s2ws(dbgStr);
-		LPCWSTR finalDbgStr = dbgWstr.c_str();
-		OutputDebugString(finalDbgStr);
+			do {
+				yIntermediate = yFinal;     // next approximation
+				steps = 2 * steps;  // double the number of steps
+							// i.e halving the step value
+				yFinal = simpsonMethod(FunctionV3, leftLimit, rightLimit, steps);
+			} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
+		}
+		else if (method == "Riemann sum (Right)")
+		{
+			yFinal = rectangleMethod(FunctionV8, leftLimit, rightLimit, steps); // first approximation for integral
+
+			do {
+				yIntermediate = yFinal;     // next approximation
+				steps = 2 * steps;  // double the number of steps
+											//i.e halving the step value
+				yFinal = rectangleMethod(FunctionV8, leftLimit, rightLimit, steps);
+			} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
+		}
+
+		results.push_back(yFinal);
+		testDebug("size of results: " + std::to_string(results.size()) + "\r\n" + "result: " + std::to_string(yFinal) + "\r\n");
 	}
-	else if (method == "Riemann sum (Right)")
-	{
-		yFinal = rectangleMethod(FunctionV8, leftLimitDouble, rightLimitDouble, steps); // first approximation for integral
-
-		do {
-			yIntermediate = yFinal;     // next approximation
-			steps = 2 * steps;  // double the number of steps
-										//i.e halving the step value
-			yFinal = rectangleMethod(FunctionV8, leftLimitDouble, rightLimitDouble, steps);
-		} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
-
-		std::string dbgStr = std::to_string(yFinal) + "\r\n";
-		std::wstring dbgWstr = s2ws(dbgStr);
-		LPCWSTR finalDbgStr = dbgWstr.c_str();
-		OutputDebugString(finalDbgStr);
-	}
-
-	results.push_back(yFinal);
-
-	std::string dbgStr1 = "size: " + std::to_string(results.size()) + "\r\n";
-	std::wstring dbgWstr1 = s2ws(dbgStr1);
-	LPCWSTR finalDbgStr1 = dbgWstr1.c_str();
-	OutputDebugString(finalDbgStr1);
-
-	std::string dbgStr = std::to_string(yFinal) + "\r\n";
-	std::wstring dbgWstr = s2ws(dbgStr);
-	LPCWSTR finalDbgStr = dbgWstr.c_str();
-	OutputDebugString(finalDbgStr);
 }
+
+
+//void calculateIntegral(double leftLimit, double rightLimit, double epsDouble, std::string method)
+//{
+//	double yFinal = 0, yIntermediate = 0;
+//	int steps = 1; // initial number of steps
+//
+//	if (method == "Simpson's rule")
+//	{
+//		yFinal = simpsonMethod(FunctionV3, leftLimit, rightLimit, steps); // first approximation for integral
+//
+//		do {
+//			yIntermediate = yFinal;     // next approximation
+//			steps = 2 * steps;  // double the number of steps
+//						// i.e halving the step value
+//			yFinal = simpsonMethod(FunctionV3, leftLimit, rightLimit, steps);
+//		} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
+//	}
+//	else if (method == "Riemann sum (Right)")
+//	{
+//		yFinal = rectangleMethod(FunctionV8, leftLimit, rightLimit, steps); // first approximation for integral
+//
+//		do {
+//			yIntermediate = yFinal;     // next approximation
+//			steps = 2 * steps;  // double the number of steps
+//										//i.e halving the step value
+//			yFinal = rectangleMethod(FunctionV8, leftLimit, rightLimit, steps);
+//		} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
+//	}
+//
+//	results.push_back(yFinal);
+//	testDebug("size of results: " + std::to_string(results.size()) + "\r\n" + "result: " + std::to_string(yFinal) + "\r\n");
+//}
 
 
 void PowerSplitFinal::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
@@ -213,9 +243,10 @@ void PowerSplitFinal::MainPage::CalculateButtonClicked(Platform::Object^ sender,
 
 	double yFinal = 0, yIntermediate = 0;
 	double leftLimitDouble = 0, rightLimitDouble = 0, epsDouble = 0;
-	int numberOfThreads = 0;
+	int numberOfThreads = 1, numberOfIntervals = 1;
 	std::string method = "";
 
+	// Take data from UI
 	String^ leftLimitPstr = textBoxLeftLimit->Text;
 	leftLimitDouble = ps2d(leftLimitPstr);
 	String^ rightLimitPstr = textBoxRightLimit->Text;
@@ -224,6 +255,8 @@ void PowerSplitFinal::MainPage::CalculateButtonClicked(Platform::Object^ sender,
 	epsDouble = ps2d(epsPstr);
 	String^ numberOfThreadsPstr = textBoxThreads->Text;
 	numberOfThreads = ps2i(numberOfThreadsPstr);
+	String^ numberOfIntervalsPstr = textBoxIntervals->Text;
+	numberOfIntervals = ps2i(numberOfIntervalsPstr);
 
 	if (radioButtonMethod1->IsChecked->Value == true)
 	{
@@ -236,11 +269,114 @@ void PowerSplitFinal::MainPage::CalculateButtonClicked(Platform::Object^ sender,
 		method = ps2s(methodPstr);
 	}
 
-	double delimeter = (rightLimitDouble - leftLimitDouble) / numberOfThreads;
-	for (double itt = leftLimitDouble, ittNext = itt + delimeter; ittNext <= rightLimitDouble; itt += delimeter, ittNext += delimeter)
+	if (numberOfIntervals < numberOfThreads)
 	{
-		std::thread thr(calculateIntegral, itt, ittNext, epsDouble, method);
-		threads.emplace_back(std::move(thr));
+		numberOfThreads = numberOfIntervals;
+	}
+
+	double intervalDelimeter = (rightLimitDouble - leftLimitDouble) / numberOfIntervals;
+
+	for (double itt = leftLimitDouble, ittNext = itt + intervalDelimeter; ittNext <= rightLimitDouble; itt += intervalDelimeter, ittNext += intervalDelimeter)
+	{
+		intervals[itt] = ittNext;
+	}
+
+	double intervalsRemain = numberOfIntervals % numberOfThreads;
+
+	std::string outputDataStr1 = "D1: " + std::to_string(intervalsRemain) + "\r\n";
+	textBlockOutput->Text += s2ps(outputDataStr1);
+
+	int threadDelimeter = numberOfIntervals / numberOfThreads;
+
+	std::string outputDataStr2 = "D2: " + std::to_string(threadDelimeter) + "\r\n";
+	textBlockOutput->Text += s2ps(outputDataStr2);
+
+	std::vector<double> leftLimits;
+	std::vector<double> rightLimits;
+
+	if (intervalsRemain == 0 && threadDelimeter == 1)
+	{
+		for (auto const& [key, val] : intervals)
+		{
+			double leftLimit = key;         // double (key)
+			double rightLimit = val;        // double's value
+
+			leftLimits.emplace_back(leftLimit);
+			rightLimits.emplace_back(rightLimit);
+			
+			std::thread thr(calculateIntegral, leftLimits, rightLimits, epsDouble, method);
+			threads.emplace_back(std::move(thr));
+
+			leftLimits.clear();
+			rightLimits.clear();
+		}
+		intervals.clear();
+	}
+	else if (intervalsRemain == 0)
+	{
+		int numberOfLimits = 0;
+		for (int itt = 0; itt < numberOfThreads; itt++)
+		{
+			for (auto const& [key, val] : intervals)
+			{
+				if (numberOfLimits < threadDelimeter)
+				{
+					double leftLimit = key;         // double (key)
+					double rightLimit = val;        // double's value
+
+					leftLimits.emplace_back(leftLimit);
+					rightLimits.emplace_back(rightLimit);
+
+					numberOfLimits++;
+				}
+				else break;
+			}
+
+			/*for (auto& leftLimitIt : leftLimits)
+			{
+				intervals.erase(leftLimitIt);
+			}*/
+
+			std::thread thr(calculateIntegral, leftLimits, rightLimits, epsDouble, method);
+			threads.emplace_back(std::move(thr));
+
+			leftLimits.clear();
+			rightLimits.clear();
+		}
+		intervals.clear();
+	}
+	else
+	{
+		int numberOfLimits = 0;
+		for (int itt = 0; itt < numberOfThreads; itt++)
+		{
+			for (auto const& [key, val] : intervals)
+			{
+				if (numberOfLimits < threadDelimeter)
+				{
+					double leftLimit = key;         // double (key)
+					double rightLimit = val;        // double's value
+
+					leftLimits.emplace_back(leftLimit);
+					rightLimits.emplace_back(rightLimit);
+
+					numberOfLimits++;
+				}
+				else break;
+			}
+
+			/*for (auto& leftLimitIt : leftLimits)
+			{
+				intervals.erase(leftLimitIt);
+			}*/
+
+			std::thread thr(calculateIntegral, leftLimits, rightLimits, epsDouble, method);
+			threads.emplace_back(std::move(thr));
+
+			leftLimits.clear();
+			rightLimits.clear();
+		}
+		intervals.clear();
 	}
 
 	for (auto& thread : threads) {
