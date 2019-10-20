@@ -68,7 +68,9 @@ protected:
 		int n;
 		while ((n = receive(_source)) != _sentinel)
 		{
+			cout << pow(n, 2) << endl;
 			sum += pow(n, 2);
+			cout << sum << endl;
 			++count;
 		}
 
@@ -92,7 +94,7 @@ int wmain()
 	// Informs the consumer agent to stop processing.
 	const int sentinel = 0;
 	// The number of values for the producer agent to send.
-	const unsigned int count = 100;
+	const unsigned int count = 20;
 
 	// A message buffer that is shared by the agents.
 	unbounded_buffer<int> buffer;

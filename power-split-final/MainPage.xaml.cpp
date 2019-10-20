@@ -196,39 +196,6 @@ void calculateIntegral(std::vector<double> &leftLimits, std::vector<double> &rig
 }
 
 
-//void calculateIntegral(double leftLimit, double rightLimit, double epsDouble, std::string method)
-//{
-//	double yFinal = 0, yIntermediate = 0;
-//	int steps = 1; // initial number of steps
-//
-//	if (method == "Simpson's rule")
-//	{
-//		yFinal = simpsonMethod(FunctionV3, leftLimit, rightLimit, steps); // first approximation for integral
-//
-//		do {
-//			yIntermediate = yFinal;     // next approximation
-//			steps = 2 * steps;  // double the number of steps
-//						// i.e halving the step value
-//			yFinal = simpsonMethod(FunctionV3, leftLimit, rightLimit, steps);
-//		} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
-//	}
-//	else if (method == "Riemann sum (Right)")
-//	{
-//		yFinal = rectangleMethod(FunctionV8, leftLimit, rightLimit, steps); // first approximation for integral
-//
-//		do {
-//			yIntermediate = yFinal;     // next approximation
-//			steps = 2 * steps;  // double the number of steps
-//										//i.e halving the step value
-//			yFinal = rectangleMethod(FunctionV8, leftLimit, rightLimit, steps);
-//		} while (fabs(yFinal - yIntermediate) > epsDouble);  // comparison of approximations with a given accuracy
-//	}
-//
-//	results.push_back(yFinal);
-//	testDebug("size of results: " + std::to_string(results.size()) + "\r\n" + "result: " + std::to_string(yFinal) + "\r\n");
-//}
-
-
 void PowerSplitFinal::MainPage::PageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	// Clearing output area
@@ -283,13 +250,13 @@ void PowerSplitFinal::MainPage::CalculateButtonClicked(Platform::Object^ sender,
 
 	double intervalsRemain = numberOfIntervals % numberOfThreads;
 
-	std::string outputDataStr1 = "D1: " + std::to_string(intervalsRemain) + "\r\n";
-	textBlockOutput->Text += s2ps(outputDataStr1);
+	//std::string outputDataStr1 = "D1: " + std::to_string(intervalsRemain) + "\r\n";
+	//textBlockOutput->Text += s2ps(outputDataStr1);
 
 	int threadDelimeter = numberOfIntervals / numberOfThreads;
 
-	std::string outputDataStr2 = "D2: " + std::to_string(threadDelimeter) + "\r\n";
-	textBlockOutput->Text += s2ps(outputDataStr2);
+	//std::string outputDataStr2 = "D2: " + std::to_string(threadDelimeter) + "\r\n";
+	//textBlockOutput->Text += s2ps(outputDataStr2);
 
 	std::vector<double> leftLimits;
 	std::vector<double> rightLimits;
@@ -332,13 +299,13 @@ void PowerSplitFinal::MainPage::CalculateButtonClicked(Platform::Object^ sender,
 				else break;
 			}
 
-			/*for (auto& leftLimitIt : leftLimits)
-			{
-				intervals.erase(leftLimitIt);
-			}*/
-
 			std::thread thr(calculateIntegral, leftLimits, rightLimits, epsDouble, method);
 			threads.emplace_back(std::move(thr));
+
+			for (auto& leftLimitIt : leftLimits)
+			{
+				intervals.erase(leftLimitIt);
+			}
 
 			leftLimits.clear();
 			rightLimits.clear();
@@ -362,13 +329,35 @@ void PowerSplitFinal::MainPage::CalculateButtonClicked(Platform::Object^ sender,
 
 					numberOfLimits++;
 				}
+
 				else break;
 			}
 
-			/*for (auto& leftLimitIt : leftLimits)
+			for (auto& leftLimitIt : leftLimits)
 			{
 				intervals.erase(leftLimitIt);
-			}*/
+			}
+
+			if (intervalsRemain < 0)
+			{
+				for (auto const& [key, val] : intervals)
+				{
+					double leftLimit = key;         // double (key)
+					double rightLimit = val;        // double's value
+
+					leftLimits.emplace_back(leftLimit);
+					rightLimits.emplace_back(rightLimit);
+
+					intervalsRemain--;
+
+					break;
+				}
+
+				for (auto& leftLimitIt : leftLimits)
+				{
+					intervals.erase(leftLimitIt);
+				}
+			}
 
 			std::thread thr(calculateIntegral, leftLimits, rightLimits, epsDouble, method);
 			threads.emplace_back(std::move(thr));
